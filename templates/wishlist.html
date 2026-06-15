@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="user-dash-container" style="max-width: 1200px;">
+  <div class="info-header">
+    <h1>MY WISHLIST</h1>
+    <p>Items you love, saved for later.</p>
+  </div>
+
+  {% if items %}
+  <div class="wish-grid">
+    {% for wish in items %}
+    {% if wish.item %}
+    <div class="wish-card">
+      <div class="wish-img-wrap">
+        <img src="{{ img_src(wish.item.image_url) }}" alt="{{ wish.item.name }}">
+        <a href="/wishlist/remove/{{ wish.id }}" class="wish-remove" title="Remove"><i class="fas fa-times"></i></a>
+      </div>
+      <div class="wish-info">
+        <h3>{{ wish.item.name }}</h3>
+        <p class="wish-price">₹ {{ wish.item.price }}</p>
+        <a href="/add-to-cart/{{ wish.item.id }}" class="btn btn-dark" style="width: 100%;">ADD TO CART</a>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="far fa-heart"></i></div>
+    <h2>Your wishlist is empty</h2>
+    <p>Save items you love while you browse our collection.</p>
+    <a href="/category/0" class="btn btn-dark">BROWSE COLLECTION</a>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="user-dash-container">
+  <div class="user-dash-header">
+    <div class="user-dash-avatar">
+      <img src="{{ img_src(current_user.profile_photo) }}" alt="Profile">
+    </div>
+    <div class="user-dash-info">
+      <h1>{{ current_user.username }}</h1>
+      <p>{{ current_user.email }}</p>
+      {% if current_user.phone %}<p>{{ current_user.phone }}</p>{% endif %}
+    </div>
+  </div>
+
+  <div class="dash-section-title">MY ACCOUNT</div>
+
+  <div class="dash-grid">
+    <a href="/my-orders" class="dash-tile">
+      <div class="dash-tile-icon"><i class="fas fa-box"></i></div>
+      <div class="dash-tile-text">
+        <span class="dash-tile-label">Orders</span>
+        <span class="dash-tile-sub">Track & manage</span>
+      </div>
+    </a>
+    <a href="/wishlist" class="dash-tile">
+      <div class="dash-tile-icon"><i class="far fa-heart"></i></div>
+      <div class="dash-tile-text">
+        <span class="dash-tile-label">Wishlist</span>
+        <span class="dash-tile-sub">Saved items</span>
+      </div>
+    </a>
+    <a href="/feedback" class="dash-tile">
+      <div class="dash-tile-icon"><i class="fas fa-envelope"></i></div>
+      <div class="dash-tile-text">
+        <span class="dash-tile-label">Feedback</span>
+        <span class="dash-tile-sub">Share your thoughts</span>
+      </div>
+    </a>
+    <a href="/faq" class="dash-tile">
+      <div class="dash-tile-icon"><i class="fas fa-question-circle"></i></div>
+      <div class="dash-tile-text">
+        <span class="dash-tile-label">FAQs</span>
+        <span class="dash-tile-sub">Quick answers</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="dash-links-section">
+    <div class="dash-section-title">INFORMATION</div>
+    <div class="dash-links-row">
+      <a href="/terms" class="dash-link">Terms & Conditions</a>
+      <a href="/privacy" class="dash-link">Privacy Policy</a>
+      <a href="/licenses" class="dash-link">Licenses</a>
+      <a href="/help" class="dash-link">Help Center</a>
+      <a href="/contact_us" class="dash-link">Contact Us</a>
+    </div>
+  </div>
+
+  <div class="dash-logout-wrap">
+    <a href="/logout" class="btn btn-outline">LOGOUT</a>
+  </div>
+</section>
+
+{% endblock %}

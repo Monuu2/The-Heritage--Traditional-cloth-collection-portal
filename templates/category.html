@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="shop-page-wrapper">
+
+  <!-- GRAND ROYAL HERO -->
+  <section class="category-hero" 
+    {% if category_name == 'For Him' %}
+      style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('/static/images/heritage_him_hero.png');"
+    {% elif category_name == 'For Her' %}
+      style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('/static/images/heritage_her_hero.png');"
+    {% endif %}
+  >
+    <p class="category-hero-breadcrumb">
+      <a href="/" style="color: inherit; text-decoration: none;">HOME</a> /
+      <a href="/category/0" style="color: inherit; text-decoration: none;">SHOP</a> /
+      <span>{{ category_name if category_name else 'ALL PRODUCTS' }}</span>
+    </p>
+    <h1 class="category-hero-title">{{ category_name if category_name else 'THE COLLECTION' }}</h1>
+    <div style="width: 80px; height: 2px; background: var(--clr-gold); margin: 0 auto;"></div>
+  </section>
+
+  <!-- SHOP LAYOUT -->
+  <div class="shop-layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="filter-sidebar">
+      <h3 class="filter-heading">THE ATELIER</h3>
+
+      <!-- Category -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">COLLECTIONS</h4>
+        <ul class="filter-list" style="list-style: none; padding: 0;">
+          <li><a href="/category/0" class="filter-link {% if not category_name or category_name == 'All Products' %}filter-active{% endif %}">ALL PRODUCTS</a></li>
+          <li><a href="/category/1" class="filter-link {% if category_name == 'For Him' %}filter-active{% endif %}">FOR HIM</a></li>
+          <li><a href="/category/2" class="filter-link {% if category_name == 'For Her' %}filter-active{% endif %}">FOR HER</a></li>
+          <li><a href="/category/3" class="filter-link {% if category_name == 'Jewellery' %}filter-active{% endif %}">JEWELLERY</a></li>
+          <li><a href="/category/4" class="filter-link {% if category_name == 'Others' %}filter-active{% endif %}">OTHERS</a></li>
+        </ul>
+      </div>
+
+      <!-- Price Filter -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">PRICE FILTER</h4>
+        <form method="GET" action="/category/{{ category_id if category_id is defined else 0 }}" id="priceForm">
+          <div class="price-inputs">
+            <div class="price-input-wrap">
+              <label>FROM</label>
+              <input type="number" name="min_price" id="minInput" class="form-control"
+                     value="{{ min_price|int if min_price else '' }}"
+                     placeholder="0" min="0" step="50" style="padding: 10px; border-radius: 0;">
+            </div>
+            <span style="margin-top: 15px; color: var(--clr-text-muted);">—</span>
+            <div class="price-input-wrap">
+              <label>TO</label>
+              <input type="number" name="max_price" id="maxInput" class="form-control"
+                     value="{{ max_price|int if max_price else '' }}"
+                     placeholder="MAX" min="0" step="50" style="padding: 10px; border-radius: 0;">
+            </div>
+          </div>
+          
+          <div class="range-slider-wrap">
+            <input type="range" id="minRange" min="0" max="10000" step="50"
+                   value="{{ min_price|int if min_price else 0 }}" class="range-slider">
+            <input type="range" id="maxRange" min="0" max="10000" step="50"
+                   value="{{ max_price|int if max_price else 10000 }}" class="range-slider">
+            <div class="range-track">
+              <div class="range-fill" id="rangeFill"></div>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-dark" style="flex: 1; padding: 12px; font-size: 10px; letter-spacing: 2px;">APPLY</button>
+            {% if min_price or max_price %}
+            <a href="/category/{{ category_id if category_id is defined else 0 }}" class="btn btn-outline" style="flex: 1; padding: 12px; font-size: 10px; letter-spacing: 2px; text-align: center;">CLEAR</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
+      <!-- Availability -->
+      <div class="filter-group">
+        <h4 class="filter-group-title">AVAILABILITY</h4>
+        <label class="filter-link" style="cursor: pointer;">
+          <input type="checkbox" checked style="accent-color: var(--clr-gold); margin-right: 12px;"> IN STOCK
+        </label>
+        <label class="filter-link" style="cursor: pointer;">
+          <input type="checkbox" style="accent-color: var(--clr-gold); margin-right: 12px;"> OUT OF STOCK
+        </label>
+      </div>
+
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="shop-main">
+
+      <!-- Top bar -->
+      <div class="shop-topbar">
+        <p class="result-count">
+          Showing <strong>{{ items|length }}</strong> heritage piece{{ 's' if items|length != 1 }}
+          {% if min_price or max_price %}
+          <span style="margin-left: 15px; color: var(--clr-gold); font-size: 12px; font-weight: 600;">
+            [ ₹{{ min_price|int if min_price else 0 }} — ₹{{ max_price|int if max_price else '∞' }} ]
+          </span>
+          {% endif %}
+        </p>
+        <div class="sort-wrap" style="display: flex; align-items: center; gap: 15px;">
+          <span style="font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--clr-text-muted);">SORT BY:</span>
+          <div class="sort-select-wrap">
+            <select class="sort-select">
+              <option>NEWEST</option>
+              <option>PRICE: LOW TO HIGH</option>
+              <option>PRICE: HIGH TO LOW</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      {% if items %}
+      <div class="products-grid">
+        {% for item in items %}
+        <a href="/item/{{ item.id }}" class="product-card">
+          <div class="card-img-wrap">
+            <img src="{{ img_src(item.image_url) }}" alt="{{ item.name }}" class="card-img" loading="lazy">
+            
+            {% if item.stock == 0 %}
+            <span class="card-badge" style="background: #555;">OUT OF STOCK</span>
+            {% elif item.stock <= 5 %}
+            <span class="card-badge" style="background: #e67e22;">ONLY {{ item.stock }} LEFT</span>
+            {% else %}
+            <span class="card-badge">CULTURAL HERITAGE</span>
+            {% endif %}
+
+            <div class="card-actions">
+              <span class="card-action-btn" title="Add to Cart" onclick="event.stopPropagation(); event.preventDefault(); window.location='/add-to-cart/{{ item.id }}'">
+                <i class="fas fa-shopping-cart"></i>
+              </span>
+              <span class="card-action-btn" title="Wishlist" onclick="event.stopPropagation(); event.preventDefault(); window.location='{% if current_user.is_authenticated %}/wishlist/add/{{ item.id }}{% else %}/login{% endif %}'">
+                <i class="far fa-heart"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <span class="card-cat-label">{{ item.category.name if item.category else 'TRADITIONAL' }}</span>
+            <h3 class="card-title">{{ item.name }}</h3>
+            <p class="card-price">₹{{ "%.0f"|format(item.price) }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% else %}
+      <div class="empty-state" style="border: 1px solid var(--clr-border); padding: 100px 40px;">
+        <div class="empty-icon" style="font-size: 48px; color: var(--clr-gold); margin-bottom: 24px;"><i class="fas fa-gem"></i></div>
+        <h2 style="font-family: var(--font-display); font-size: 32px; letter-spacing: 4px; margin-bottom: 12px;">COLLECTION EMPTY</h2>
+        <p style="color: var(--clr-text-muted); margin-bottom: 40px;">We couldn't find any pieces matching your current selection.</p>
+        <a href="/category/0" class="btn btn-dark" style="padding: 18px 40px;">BROWSE ALL COLLECTIONS</a>
+      </div>
+      {% endif %}
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  const minRange = document.getElementById('minRange');
+  const maxRange = document.getElementById('maxRange');
+  const minInput = document.getElementById('minInput');
+  const maxInput = document.getElementById('maxInput');
+  const fill    = document.getElementById('rangeFill');
+  const MAX     = 10000;
+
+  function updateFill() {
+    const minVal = parseInt(minRange.value);
+    const maxVal = parseInt(maxRange.value);
+    fill.style.left  = (minVal / MAX * 100) + '%';
+    fill.style.right = ((MAX - maxVal) / MAX * 100) + '%';
+  }
+
+  minRange.addEventListener('input', function () {
+    if (parseInt(minRange.value) > parseInt(maxRange.value)) minRange.value = maxRange.value;
+    minInput.value = minRange.value;
+    updateFill();
+  });
+
+  maxRange.addEventListener('input', function () {
+    if (parseInt(maxRange.value) < parseInt(minRange.value)) maxRange.value = minRange.value;
+    maxInput.value = maxRange.value === '10000' ? '' : maxRange.value;
+    updateFill();
+  });
+
+  minInput.addEventListener('input', function () {
+    minRange.value = minInput.value || 0;
+    updateFill();
+  });
+
+  maxInput.addEventListener('input', function () {
+    maxRange.value = maxInput.value || MAX;
+    updateFill();
+  });
+
+  updateFill();
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set checkout_step = 2 %}
+{% include "user/_stepper.html" %}
+
+<section class="checkout-container">
+  <div class="checkout-header">
+    <h1>PAYMENT DETAILS</h1>
+    <p>Secure your traditional heritage piece</p>
+  </div>
+
+  <div class="checkout-layout">
+    <!-- PAYMENT METHODS -->
+    <div class="pay-methods-list">
+      <div class="summary-title">SELECT PAYMENT METHOD</div>
+      
+      <!-- UPI -->
+      <div class="pay-method active" onclick="selectMethod(this, 'upi')">
+        <div class="pay-method-header">
+          <div class="pay-radio-outer"><div class="pay-radio-inner"></div></div>
+          <div class="pay-method-icon-wrap"><i class="fas fa-mobile-alt"></i></div>
+          <div class="pay-method-text">
+            <span class="pay-method-name">UPI / QR Code</span>
+            <span class="pay-method-desc">Instant confirmation via GPay, PhonePe, Paytm</span>
+          </div>
+        </div>
+        <div class="pay-method-body" style="display: flex;">
+          <div class="form-group">
+            <label>UPI ID</label>
+            <input type="text" placeholder="name@upi" class="form-control">
+          </div>
+          <p class="pay-hint">Or scan the QR code generated after clicking confirm.</p>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="pay-method" onclick="selectMethod(this, 'card')">
+        <div class="pay-method-header">
+          <div class="pay-radio-outer"><div class="pay-radio-inner"></div></div>
+          <div class="pay-method-icon-wrap"><i class="fas fa-credit-card"></i></div>
+          <div class="pay-method-text">
+            <span class="pay-method-name">Credit / Debit Card</span>
+            <span class="pay-method-desc">All major cards supported</span>
+          </div>
+        </div>
+        <div class="pay-method-body">
+          <div class="form-group">
+            <label>CARD NUMBER</label>
+            <input type="text" placeholder="0000 0000 0000 0000" class="form-control" maxlength="19">
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="form-group">
+              <label>EXPIRY</label>
+              <input type="text" placeholder="MM / YY" class="form-control" maxlength="7">
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" placeholder="123" class="form-control" maxlength="3">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>CARDHOLDER NAME</label>
+            <input type="text" placeholder="John Doe" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <!-- NET BANKING -->
+      <div class="pay-method" onclick="selectMethod(this, 'netbanking')">
+        <div class="pay-method-header">
+          <div class="pay-radio-outer"><div class="pay-radio-inner"></div></div>
+          <div class="pay-method-icon-wrap"><i class="fas fa-university"></i></div>
+          <div class="pay-method-text">
+            <span class="pay-method-name">Net Banking</span>
+            <span class="pay-method-desc">Select from 50+ major banks</span>
+          </div>
+        </div>
+        <div class="pay-method-body">
+          <div class="form-group">
+            <label>SELECT BANK</label>
+            <select class="form-control">
+              <option value="">Choose your bank</option>
+              <option>State Bank of India</option>
+              <option>HDFC Bank</option>
+              <option>ICICI Bank</option>
+              <option>Axis Bank</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- COD -->
+      <div class="pay-method" onclick="selectMethod(this, 'cod')">
+        <div class="pay-method-header">
+          <div class="pay-radio-outer"><div class="pay-radio-inner"></div></div>
+          <div class="pay-method-icon-wrap"><i class="fas fa-hand-holding-usd"></i></div>
+          <div class="pay-method-text">
+            <span class="pay-method-name">Cash on Delivery</span>
+            <span class="pay-method-desc">Pay when your order arrives</span>
+          </div>
+        </div>
+        <div class="pay-method-body">
+          <p class="pay-hint">Please keep the exact amount ready for the delivery partner. Available for orders under ₹5000.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="checkout-summary">
+      <div class="summary-title">ORDER SUMMARY</div>
+      <div class="orders-list" style="margin-bottom: 24px; max-height: 200px; overflow-y: auto;">
+        {% for item in items %}
+        <div class="order-card" style="grid-template-columns: 50px 1fr; padding: 12px; gap: 16px;">
+          <div class="order-card-img" style="width: 50px; height: 60px;">
+            <img src="{{ img_src(item.image_url) }}" alt="{{ item.name }}">
+          </div>
+          <div class="order-card-info">
+            <h4 style="font-size: 13px; margin: 0;">{{ item.name }}</h4>
+            <p style="font-size: 12px; color: var(--clr-gold); margin: 0;">₹ {{ item.price }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="summary-line"><span>Subtotal</span><span>₹ {{ total }}</span></div>
+      <div class="summary-line"><span>Shipping</span><span>₹ 100</span></div>
+      <div class="summary-total summary-line"><span>TOTAL</span><span>₹ {{ total + 100 }}</span></div>
+      
+      <a href="/place-order" class="btn btn-dark" style="width: 100%; margin-top: 32px;">PLACE ORDER</a>
+      <p style="font-size: 10px; color: var(--clr-text-muted); text-align: center; margin-top: 16px; text-transform: uppercase; letter-spacing: 1px;">
+        <i class="fas fa-shield-alt"></i> Secured by 256-bit SSL encryption
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+function selectMethod(el, method) {
+  document.querySelectorAll('.pay-method').forEach(m => {
+    m.classList.remove('active');
+    const body = m.querySelector('.pay-method-body');
+    if (body) body.style.display = 'none';
+  });
+  el.classList.add('active');
+  const body = el.querySelector('.pay-method-body');
+  if (body) body.style.display = 'flex';
+}
+</script>
+
+{% endblock %}

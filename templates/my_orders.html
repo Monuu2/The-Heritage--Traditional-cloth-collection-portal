@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="user-dash-container">
+  <div class="info-header">
+    <h1>MY ORDERS</h1>
+    <p>Your purchase history and status</p>
+  </div>
+
+  {% if orders %}
+  <div class="orders-list">
+    {% for order in orders %}
+    <div class="order-card">
+      <div class="order-card-img">
+        {% if order.item and order.item.image_url %}
+        <img src="{{ img_src(order.item.image_url) }}" alt="{{ order.item.name }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Product">
+        {% endif %}
+      </div>
+      <div class="order-card-info">
+        <p class="order-id">ORDER #{{ order.id }}</p>
+        <h3>{{ order.item.name if order.item else 'Product' }}</h3>
+        <p class="order-price">₹ {{ order.total_price }}</p>
+        <p class="order-qty">Quantity: {{ order.quantity }}</p>
+      </div>
+      <div class="order-card-status">
+        <span class="status-badge status-{{ (order.status or 'placed')|lower }}">{{ order.status or 'Placed' }}</span>
+        
+        <div class="order-actions" style="margin-top: 16px; display: flex; gap: 12px;">
+          {% if order.status|lower not in ['cancelled', 'returned', 'shipped', 'delivered'] %}
+            <a href="/cancel-order/{{ order.id }}" class="btn btn-outline" style="font-size: 10px; padding: 8px 16px;" onclick="return confirm('Are you sure you want to cancel this order?')">Cancel</a>
+          {% endif %}
+          
+          {% if order.status|lower == 'delivered' %}
+            <a href="/return-order/{{ order.id }}" class="btn btn-outline" style="font-size: 10px; padding: 8px 16px;" onclick="return confirm('Do you want to request a return for this delivered item?')">Return</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+    <h2>No orders yet</h2>
+    <p>When you place orders, they will appear here.</p>
+    <a href="/category/0" class="btn btn-dark">START SHOPPING</a>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

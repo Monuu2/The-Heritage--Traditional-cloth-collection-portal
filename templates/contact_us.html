@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="contact-page-wrapper">
+  <!-- HERO SECTION -->
+  <section class="contact-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> <span>Contact Us</span>
+      </nav>
+      <h1>Get in Touch</h1>
+      <p>Whether you have a question about our traditional weaves or just want to say hello, we'd love to hear from you.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- CONTACT INFO SIDE -->
+        <div class="contact-info-panel">
+          <div class="info-header">
+            <span class="sub-title">Connect with Heritage</span>
+            <h2>Our Boutique & Studio</h2>
+            <p>Visit us to experience the authentic craftsmanship of Bodo traditional wear in person.</p>
+          </div>
+
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="card-text">
+                <h3>Our Location</h3>
+                <p>Baksa, Assam, India, 781344</p>
+                <p class="soft-text">Located in the heart of Bodo heritage.</p>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+              <div class="card-text">
+                <h3>Call Us</h3>
+                <p>+91 9678243647</p>
+                <p class="soft-text">Mon - Sat: 9:00 AM - 7:00 PM</p>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="icon-box"><i class="fas fa-envelope"></i></div>
+              <div class="card-text">
+                <h3>Email Support</h3>
+                <p>heritage@culture.com</p>
+                <p class="soft-text">We respond within 24 hours.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-connect">
+            <h4>Follow Our Journey</h4>
+            <div class="social-links">
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT FORM SIDE -->
+        <div class="contact-form-panel">
+          <div class="image-box">
+            <img src="https://bododimasaarchive.org/system/files/atoms/image/Bathou%20Altar.jpg"
+              alt="Heritage Boutique">
+          </div>
+          <div class="form-wrapper">
+            <h3>Send a Message</h3>
+            <p>Fill out the form below and our team will get back to you shortly.</p>
+
+            <form action="/contact_us" method="POST" class="premium-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+              <div class="form-group">
+                <input type="text" name="name" id="name">
+                <label for="name">Name</label>
+              </div>
+
+              <div class="form-group">
+                <input type="email" name="email" id="email">
+                <label for="email">Email</label>
+              </div>
+
+              <div class="form-group">
+                <input type="text" name="subject" id="subject">
+                <label for="subject">Subject</label>
+              </div>
+
+              <div class="form-group">
+                <textarea name="message" id="message" rows="4" required></textarea>
+                <label for="message">Message</label>
+              </div>
+
+              <button type="submit" class="submit-btn">
+                <span>Send Message</span>
+                <i class="fas fa-long-arrow-alt-right"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP PLACEHOLDER SECTION -->
+  <section class="map-section">
+    <div class="map-placeholder">
+      <div class="map-overlay">
+        <i class="fas fa-map-marked-alt"></i>
+        <span>Explore Baksa Heritage Center</span>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

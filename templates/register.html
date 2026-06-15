@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="auth-page-wrapper">
+  <section class="auth-container">
+    
+    <!-- LEFT SIDE: BRANDING/STORY -->
+    <aside class="auth-aside">
+      <div class="auth-aside-content">
+        <span class="auth-aside-label">EST. 1923</span>
+        <h1 class="auth-aside-title">JOIN THE HERITAGE</h1>
+        <p class="auth-aside-text">
+          Become part of a legacy that honors centuries of Boro craftsmanship. 
+          Save your curated collections, track artisanal pieces, and enjoy a 
+          personalized heritage experience.
+        </p>
+        
+        <div class="auth-steps">
+          <div class="auth-step {% if not show_otp %}active{% else %}complete{% endif %}">
+            <span class="step-num">1</span>
+            <div class="step-info">
+              <strong>PERSONAL DETAILS</strong>
+              <small>Account identification</small>
+            </div>
+          </div>
+          <div class="auth-step {% if show_otp %}active{% endif %}">
+            <span class="step-num">2</span>
+            <div class="step-info">
+              <strong>VERIFICATION</strong>
+              <small>Email confirmation</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="auth-aside-footer">
+        <p>© THE HERITAGE ARTISANAL BOUTIQUE</p>
+      </div>
+    </aside>
+
+    <!-- RIGHT SIDE: FORM -->
+    <section class="auth-form-card">
+      <div class="auth-card-head">
+        <h2 class="auth-card-title">{% if show_otp %}VERIFY EMAIL{% else %}CREATE ACCOUNT{% endif %}</h2>
+        <p class="auth-card-subtitle">
+          {% if show_otp %}
+          A 6-digit code has been sent to <strong>{{ email }}</strong>.
+          {% else %}
+          Please provide your details to begin your journey with us.
+          {% endif %}
+        </p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="auth-alert">
+        {% for m in messages %}<p>{{ m|upper }}</p>{% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+      <form method="POST" enctype="multipart/form-data" class="auth-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="auth-grid">
+          <div class="auth-field">
+            <label>USERNAME</label>
+            <input type="text" name="username" value="{{ username or '' }}" placeholder="Enter username" required>
+          </div>
+          <div class="auth-field">
+            <label>EMAIL ADDRESS</label>
+            <input type="email" name="email" value="{{ email or '' }}" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div class="auth-grid">
+          <div class="auth-field">
+            <label>PHONE NUMBER</label>
+            <input type="tel" name="phone" value="{{ phone or '' }}" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+          <div class="auth-field">
+            <label>PROFILE PHOTO <small>(OPTIONAL)</small></label>
+            <input type="file" name="photo" accept="image/*" class="custom-file-input">
+          </div>
+        </div>
+
+        {% if show_otp %}
+        <input type="hidden" name="password" value="{{ password or '' }}">
+        <input type="hidden" name="confirm_password" value="{{ confirm_password or '' }}">
+        
+        <div class="auth-otp-section">
+          <div class="auth-field">
+            <label>ENTER 6-DIGIT OTP</label>
+            <input type="text" name="otp" placeholder="XXXXXX" maxlength="6" class="otp-input" required>
+          </div>
+          <button type="submit" formaction="/resend-otp" formnovalidate class="btn-text">RESEND OTP</button>
+        </div>
+        {% else %}
+        <div class="auth-grid">
+          <div class="auth-field">
+            <label>PASSWORD</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+          </div>
+          <div class="auth-field">
+            <label>CONFIRM PASSWORD</label>
+            <input type="password" name="confirm_password" placeholder="••••••••" required>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="auth-captcha-box">
+          <div class="captcha-header">
+            <label>CAPTCHA VERIFICATION</label>
+            <button type="button" id="captchaRefresh" class="btn-icon"><i class="fas fa-sync-alt"></i></button>
+          </div>
+          <div class="captcha-display" id="captchaCode">{{ captcha }}</div>
+          <input type="text" name="captcha" value="{{ submitted_captcha or '' }}" placeholder="Enter code above" required>
+        </div>
+
+        <button type="submit" class="btn btn-dark" style="width: 100%; padding: 20px; font-size: 12px;">
+          {% if show_otp %}VERIFY & CREATE ACCOUNT{% else %}CONTINUE TO VERIFICATION{% endif %}
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        ALREADY HAVE AN ACCOUNT? <a href="/login" class="dash-link">SIGN IN</a>
+      </p>
+    </section>
+
+  </section>
+</main>
+
+<style>
+/* AUTH PAGES SHARED STYLES */
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px var(--pad-x);
+  background: var(--clr-bg);
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.auth-aside {
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url('/static/images/heritage_home_hero.png') center/cover;
+  padding: 60px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-aside-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--clr-gold);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.auth-aside-title {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: 32px;
+}
+
+.auth-aside-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 60px;
+}
+
+.auth-steps {
+  display: grid;
+  gap: 20px;
+}
+
+.auth-step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+}
+
+.step-num {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 12px;
+}
+
+.step-info strong {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.step-info small {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+.auth-step.active { border-color: var(--clr-gold); }
+.auth-step.active .step-num { background: var(--clr-gold); color: #000; border-color: var(--clr-gold); }
+
+.auth-form-card {
+  padding: 60px;
+  background: var(--clr-card);
+}
+
+.auth-card-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.auth-card-subtitle {
+  font-size: 14px;
+  color: var(--clr-text-muted);
+  margin-bottom: 40px;
+}
+
+.auth-alert {
+  background: rgba(212, 160, 23, 0.1);
+  border: 1px solid var(--clr-gold);
+  padding: 15px;
+  margin-bottom: 32px;
+  color: var(--clr-gold);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 24px;
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.auth-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--clr-text-muted);
+  margin-bottom: 10px;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid var(--clr-border);
+  background: var(--clr-bg-soft);
+  color: var(--clr-text);
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.auth-field input:focus {
+  border-color: var(--clr-gold);
+  outline: none;
+}
+
+.custom-file-input {
+  padding: 11px !important;
+  font-size: 12px !important;
+}
+
+.auth-captcha-box {
+  background: var(--clr-bg-soft);
+  padding: 20px;
+  border: 1px solid var(--clr-border);
+}
+
+.captcha-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.captcha-header label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.captcha-display {
+  font-family: monospace;
+  font-size: 32px;
+  letter-spacing: 15px;
+  text-align: center;
+  padding: 20px;
+  color: var(--clr-gold);
+  background: var(--clr-bg);
+  border: 1px dashed var(--clr-gold);
+  margin-bottom: 20px;
+}
+
+.auth-otp-section {
+  background: rgba(212, 160, 23, 0.05);
+  padding: 20px;
+  border: 1px solid var(--clr-gold);
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 24px !important;
+  letter-spacing: 10px;
+  font-weight: 700;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--clr-gold);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.auth-switch {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--clr-text-muted);
+}
+
+@media (max-width: 900px) {
+  .auth-container { grid-template-columns: 1fr; }
+  .auth-aside { padding: 40px; }
+  .auth-form-card { padding: 40px; }
+}
+
+@media (max-width: 600px) {
+  .auth-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+  (function () {
+    const refreshButton = document.getElementById("captchaRefresh");
+    const captchaCode = document.getElementById("captchaCode");
+    if (!refreshButton || !captchaCode) return;
+
+    refreshButton.addEventListener("click", async () => {
+      const csrfToken = document.querySelector('input[name="csrf_token"]')?.value || "";
+      refreshButton.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i>';
+      try {
+        const response = await fetch("/captcha/refresh", {
+          method: "POST",
+          headers: { "X-CSRFToken": csrfToken }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          captchaCode.textContent = data.captcha;
+        }
+      } finally {
+        refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i>';
+      }
+    });
+  })();
+</script>
+
+{% endblock %}

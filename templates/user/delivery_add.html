@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set checkout_step = 1 %}
+{% include "user/_stepper.html" %}
+
+<section class="checkout-container">
+    <div class="dlv-container">
+
+        <div class="checkout-header" style="text-align: left; margin-bottom: 40px;">
+            <h1 class="dlv-title">Where should we<br>send your order?</h1>
+            <p class="dlv-sub">Enter your delivery address below to proceed to payment.</p>
+        </div>
+
+        {% if last_address %}
+        <div class="dlv-suggest" onclick="quickFill()">
+            <div class="dlv-suggest-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="dlv-suggest-info">
+                <p class="dlv-suggest-label">Use your last used address?</p>
+                <p class="dlv-suggest-addr">
+                    {{ last_address.fullname }} • {{ last_address.line1 }}, {{ last_address.city }}
+                </p>
+            </div>
+            <div class="dash-link" style="font-size: 10px;">QUICK FILL <i class="fas fa-chevron-right"></i></div>
+        </div>
+        {% endif %}
+
+        <form class="dlv-card" id="form-card" method="POST" action="/checkout">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="address_type" id="address_type" value="Home">
+
+            <div class="dlv-section-title">Address type</div>
+            <div class="dlv-type-row">
+                <button type="button" class="dlv-type-btn active" onclick="setType(this,'Home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button type="button" class="dlv-type-btn" onclick="setType(this,'Work')">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Work</span>
+                </button>
+                <button type="button" class="dlv-type-btn" onclick="setType(this,'Other')">
+                    <i class="fas fa-map-pin"></i>
+                    <span>Other</span>
+                </button>
+            </div>
+
+            <div class="dlv-section-title">Recipient details</div>
+            <div class="dlv-row">
+                <div class="form-group">
+                    <label>First name</label>
+                    <input type="text" id="fname" name="fname" placeholder="First Name" class="form-control" autocomplete="given-name">
+                    <div class="dlv-error" id="err-fname" style="color: var(--clr-red); font-size: 10px; display:none;">Required</div>
+                </div>
+                <div class="form-group">
+                    <label>Last name</label>
+                    <input type="text" id="lname" name="lname" placeholder="Last Name" class="form-control" autocomplete="family-name">
+                    <div class="dlv-error" id="err-lname" style="color: var(--clr-red); font-size: 10px; display:none;">Required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Phone number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number" class="form-control" autocomplete="tel">
+                <div class="dlv-error" id="err-phone" style="color: var(--clr-red); font-size: 10px; display:none;">Enter a valid phone number</div>
+            </div>
+
+            <div class="dlv-section-title" style="margin-top: 40px;">Address</div>
+
+            <div class="form-group">
+                <label>Address line 1</label>
+                <input type="text" id="line1" name="line1" placeholder="House / flat no., building name" class="form-control" autocomplete="address-line1">
+                <div class="dlv-error" id="err-line1" style="color: var(--clr-red); font-size: 10px; display:none;">Required</div>
+            </div>
+            <div class="form-group">
+                <label>Address line 2 <span style="font-size: 9px; opacity: 0.6;">(optional)</span></label>
+                <input type="text" id="line2" name="line2" placeholder="Street, area, locality" class="form-control" autocomplete="address-line2">
+            </div>
+            <div class="form-group">
+                <label>Landmark <span style="font-size: 9px; opacity: 0.6;">(optional)</span></label>
+                <input type="text" id="landmark" name="landmark" placeholder="Near temple, school, etc." class="form-control">
+            </div>
+            <div class="dlv-row3">
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="city" name="city" placeholder="City" class="form-control" autocomplete="address-level2">
+                    <div class="dlv-error" id="err-city" style="color: var(--clr-red); font-size: 10px; display:none;">Required</div>
+                </div>
+                <div class="form-group">
+                    <label>State</label>
+                    <input type="text" id="state" name="state" placeholder="State" class="form-control" autocomplete="address-level1">
+                    <div class="dlv-error" id="err-state" style="color: var(--clr-red); font-size: 10px; display:none;">Required</div>
+                </div>
+                <div class="form-group">
+                    <label>PIN code</label>
+                    <input type="text" id="pin" name="pincode" placeholder="785001" maxlength="6" class="form-control" autocomplete="postal-code">
+                    <div class="dlv-error" id="err-pin" style="color: var(--clr-red); font-size: 10px; display:none;">6-digit PIN</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Country</label>
+                <select id="country" name="country" class="form-control" autocomplete="country">
+                    <option value="India" selected>India</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Canada">Canada</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="display:flex; align-items:center; gap:10px; margin-top:20px;">
+                <input type="checkbox" id="save-addr" style="width:18px; height:18px; accent-color: var(--clr-gold);">
+                <label for="save-addr" style="margin:0; font-size: 13px; cursor:pointer;">Save this address for future orders</label>
+            </div>
+
+            <button type="button" class="btn btn-dark" style="width:100%; margin-top:40px; padding:20px;" onclick="handleSubmit()">
+                <i class="fas fa-truck" style="margin-right:10px;"></i>
+                Confirm &amp; Proceed to Payment
+            </button>
+
+            <p style="font-size: 10px; color: var(--clr-text-muted); text-align: center; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-shield-alt"></i> Your information is encrypted and secure
+            </p>
+        </form>
+
+    </div>
+</section>
+
+<script>
+    function quickFill() {
+        {% if last_address %}
+        const addr = {{ last_address|tojson }};
+        const [fname, ...lnameParts] = (addr.fullname || "").split(" ");
+        const lname = lnameParts.join(" ");
+
+        document.getElementById('fname').value = fname;
+        document.getElementById('lname').value = lname;
+        document.getElementById('phone').value = addr.phone || "";
+        document.getElementById('line1').value = addr.line1 || "";
+        document.getElementById('line2').value = addr.line2 || "";
+        document.getElementById('landmark').value = addr.landmark || "";
+        document.getElementById('city').value = addr.city || "";
+        document.getElementById('state').value = addr.state || "";
+        document.getElementById('pin').value = addr.pincode || "";
+        document.getElementById('country').value = addr.country || "India";
+
+        const type = addr.address_type || "Home";
+        document.querySelectorAll('.dlv-type-btn').forEach(btn => {
+            if (btn.innerText.trim() === type) {
+                setType(btn, type);
+            }
+        });
+        {% endif %}
+    }
+
+    function setType(btn, type) {
+        document.querySelectorAll('.dlv-type-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('address_type').value = type;
+    }
+
+    function validate(id, condition) {
+        const input = document.getElementById(id);
+        const err = document.getElementById('err-' + id);
+        if (!condition) {
+            input.style.borderColor = 'var(--clr-red)';
+            if (err) err.style.display = 'block';
+            return false;
+        }
+        input.style.borderColor = '';
+        if (err) err.style.display = 'none';
+        return true;
+    }
+
+    function handleSubmit() {
+        const fname = document.getElementById('fname').value.trim();
+        const lname = document.getElementById('lname').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const line1 = document.getElementById('line1').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const pin = document.getElementById('pin').value.trim();
+
+        let valid = true;
+        valid = validate('fname', fname.length > 0) && valid;
+        valid = validate('lname', lname.length > 0) && valid;
+        valid = validate('phone', phone.length >= 7) && valid;
+        valid = validate('line1', line1.length > 0) && valid;
+        valid = validate('city', city.length > 0) && valid;
+        valid = validate('state', state.length > 0) && valid;
+        valid = validate('pin', /^\d{6}$/.test(pin)) && valid;
+
+        if (!valid) return;
+
+        let fn = document.getElementById('fullname-hidden');
+        if (!fn) {
+            fn = document.createElement('input');
+            fn.type = 'hidden'; fn.name = 'fullname'; fn.id = 'fullname-hidden';
+            document.getElementById('form-card').appendChild(fn);
+        }
+        fn.value = fname + ' ' + lname;
+
+        document.getElementById('form-card').submit();
+    }
+</script>
+
+{% endblock %}

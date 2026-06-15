@@ -1,0 +1,62 @@
+{% extends "admin_layout.html" %}
+{% block page_title %}Edit Product{% endblock %}
+{% block content %}
+
+<div class="adm-form-card">
+  <h2>EDIT PRODUCT — #{{ '%04d'|format(item.id) }}</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="adm-field">
+      <label>Product Name *</label>
+      <input type="text" name="name" value="{{ item.name }}" required>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="adm-field">
+        <label>Price (₹) *</label>
+        <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" required>
+      </div>
+      <div class="adm-field">
+        <label>Stock Quantity *</label>
+        <input type="number" name="stock" value="{{ item.stock }}" min="0" required>
+      </div>
+    </div>
+
+    <div class="adm-field">
+      <label>Category *</label>
+      <select name="category" required>
+        <option value="">Select a category</option>
+        {% for c in categories %}
+        <option value="{{ c.id }}" {% if c.id == item.category_id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="adm-field">
+      <label>Description</label>
+      <textarea name="description">{{ item.description or '' }}</textarea>
+    </div>
+
+    {% if item.image_url %}
+    <div class="adm-field">
+      <label>Current Image</label>
+      <img src="{{ img_src(item.image_url) }}"
+        style="width:100px;height:124px;object-fit:cover;border-radius:4px;display:block;">
+    </div>
+    {% endif %}
+
+    <div class="adm-field">
+      <label>Upload New Image</label>
+      <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/webp" style="background:var(--bg-card);border:1px solid var(--border-color);padding:8px;border-radius:4px;color:var(--text-light);width:100%;">
+    </div>
+
+    <div style="margin-top:8px;">
+      <button type="submit" class="adm-btn adm-btn-primary">SAVE CHANGES</button>
+      <a href="{{ url_for('admin.stock') }}" class="adm-btn adm-btn-secondary">Cancel</a>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}

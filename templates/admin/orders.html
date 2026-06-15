@@ -1,0 +1,160 @@
+{% extends "admin_layout.html" %}
+{% block page_title %}Orders{% endblock %}
+{% block content %}
+
+<div class="adm-table-wrap">
+  <div class="adm-table-header">
+    <h3>ALL ORDERS — {{ orders|length }} TOTAL</h3>
+  </div>
+  <table class="adm-table">
+    <thead>
+      <tr>
+        <th>ORDER ID</th>
+        <th>CUSTOMER</th>
+        <th>PRODUCT</th>
+        <th>QTY</th>
+        <th>TOTAL</th>
+        <th>DELIVERY ADDRESS</th>
+        <th>STATUS</th>
+        <th>UPDATE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>#{{ '%05d'|format(order.id) }}</td>
+        <td>
+          {% if order.user %}
+            <strong style="font-size:13px;">{{ order.user.username }}</strong><br>
+            <span style="font-size:11px;color:#aaa;">{{ order.user.email }}</span>
+          {% else %}
+            <span style="color:#aaa;">User #{{ order.user_id }}</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if order.item %}
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="{{ img_src(order.item.image_url) }}" style="width:36px;height:44px;object-fit:cover;border-radius:3px;">
+              <span>{{ order.item.name }}</span>
+            </div>
+          {% else %}
+            <span style="color:#aaa;">Item #{{ order.item_id }}</span>
+          {% endif %}
+        </td>
+        <td>{{ order.quantity }}</td>
+        <td>₹ {{ order.total_price }}</td>
+
+        {# ── Delivery Address Cell ── #}
+        <td>
+          {% if order.delivery_address %}
+            {% set addr = order.delivery_address | from_json %}
+            <button class="addr-btn" onclick="toggleAddr('addr-{{ order.id }}')">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align:middle;margin-right:4px;">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              View Address
+            </button>
+            <div class="addr-card" id="addr-{{ order.id }}" style="display:none;">
+              <div class="addr-row"><span class="addr-lbl">Name</span><span>{{ addr.fullname or '—' }}</span></div>
+              <div class="addr-row"><span class="addr-lbl">Phone</span><span>{{ addr.phone or '—' }}</span></div>
+              <div class="addr-row"><span class="addr-lbl">Type</span><span>{{ addr.address_type or '—' }}</span></div>
+              <div class="addr-row"><span class="addr-lbl">Address</span>
+                <span>
+                  {{ addr.line1 or '' }}{% if addr.line2 %}, {{ addr.line2 }}{% endif %}
+                  {% if addr.landmark %}<br><em style="color:#aaa;font-size:11px;">Near {{ addr.landmark }}</em>{% endif %}
+                </span>
+              </div>
+              <div class="addr-row"><span class="addr-lbl">City</span><span>{{ addr.city or '—' }}, {{ addr.state or '' }}</span></div>
+              <div class="addr-row"><span class="addr-lbl">PIN</span><span>{{ addr.pincode or '—' }}</span></div>
+              <div class="addr-row"><span class="addr-lbl">Country</span><span>{{ addr.country or '—' }}</span></div>
+            </div>
+          {% else %}
+            <span style="color:#bbb;font-size:12px;">Not provided</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if order.status == 'Placed' %}<span class="adm-badge badge-info">Placed</span>
+          {% elif order.status == 'Processing' %}<span class="adm-badge badge-warning">Processing</span>
+          {% elif order.status == 'Shipped' %}<span class="adm-badge badge-info">Shipped</span>
+          {% elif order.status == 'Delivered' %}<span class="adm-badge badge-success">Delivered</span>
+          {% elif order.status == 'Cancelled' %}<span class="adm-badge badge-danger">Cancelled</span>
+          {% else %}<span class="adm-badge badge-warning">{{ order.status }}</span>{% endif %}
+        </td>
+        <td>
+          <select onchange="updateOrder({{ order.id }}, this.value)" style="padding:5px 8px;border:1px solid #e8e8e8;border-radius:4px;font-size:11px;cursor:pointer;outline:none;">
+            <option value="">Update...</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" style="text-align:center;color:#aaa;padding:40px;">No orders yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<style>
+.addr-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: 1px solid #d0ccc7;
+  border-radius: 5px;
+  background: #faf8f6;
+  color: #6b4226;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.addr-btn:hover {
+  background: #f0ebe4;
+  border-color: #b07850;
+  color: #5a3218;
+}
+.addr-card {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #fdf9f5;
+  border: 1px solid #e4ddd5;
+  border-radius: 7px;
+  min-width: 210px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.addr-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #333;
+  border-bottom: 1px solid #ede8e2;
+  padding: 3px 0;
+}
+.addr-row:last-child { border-bottom: none; }
+.addr-lbl {
+  font-weight: 600;
+  color: #9e8472;
+  min-width: 58px;
+  flex-shrink: 0;
+}
+</style>
+
+<script>
+function toggleAddr(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+function updateOrder(id, status){
+  if(status) window.location.href = '/admin/update-order/' + id + '/' + status;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="info-page">
+  <div class="info-header">
+    <h1>HELP CENTER</h1>
+    <p>We're here to assist you</p>
+  </div>
+  <div class="help-grid">
+    <a href="/faq" class="help-card">
+      <div class="help-card-icon">❓</div>
+      <h3>FAQs</h3>
+      <p>Quick answers to the most common questions about orders, shipping, returns, and payments.</p>
+    </a>
+    <a href="/contact_us" class="help-card">
+      <div class="help-card-icon">✉</div>
+      <h3>Contact Us</h3>
+      <p>Reach out directly via our contact form, email, or phone. We respond within 24 hours.</p>
+    </a>
+    <a href="/my-orders" class="help-card">
+      <div class="help-card-icon">📦</div>
+      <h3>Track Orders</h3>
+      <p>View the status and history of all your orders from your account dashboard.</p>
+    </a>
+    <a href="/feedback" class="help-card">
+      <div class="help-card-icon">💬</div>
+      <h3>Feedback</h3>
+      <p>Share your experience or suggestions. Your input directly shapes how we improve Heritage.</p>
+    </a>
+  </div>
+  <div class="help-contact-bar">
+    <div class="help-contact-item">
+      <span>📧</span>
+      <div>
+        <p class="help-contact-label">Email</p>
+        <p class="help-contact-val">heritage@culture.com</p>
+      </div>
+    </div>
+    <div class="help-contact-item">
+      <span>📞</span>
+      <div>
+        <p class="help-contact-label">Phone</p>
+        <p class="help-contact-val">+91 9678243647</p>
+      </div>
+    </div>
+    <div class="help-contact-item">
+      <span>🕐</span>
+      <div>
+        <p class="help-contact-label">Support Hours</p>
+        <p class="help-contact-val">Mon–Sat, 9am–6pm IST</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="shop-page-wrapper">
+
+  <!-- BREADCRUMB HEADER -->
+  <div class="info-header" style="text-align: left; padding: 24px var(--pad-x); margin-bottom: 0;">
+    <p class="shop-breadcrumb">
+      <a href="/" class="dash-link">HOME</a> /
+      <a href="/category/0" class="dash-link">SHOP</a> /
+      <a href="/category/{{ item.category_id }}" class="dash-link">{{ item.category.name if item.category else 'TRADITIONAL WEAR' }}</a> /
+      <span style="letter-spacing: 2px; color: var(--clr-text);">{{ item.name|upper }}</span>
+    </p>
+  </div>
+
+  <section class="item-page">
+    <div class="item-container">
+      
+      <!-- IMAGE GALLERY -->
+      <div class="item-images">
+        <div class="item-main-img-wrap">
+          <img src="{{ img_src(item.image_url) }}" alt="{{ item.name }}" class="item-main-img">
+          
+          {% if item.stock == 0 %}
+          <span class="card-badge" style="background: #555;">OUT OF STOCK</span>
+          {% elif item.stock <= 5 %}
+          <span class="card-badge" style="background: #e67e22;">ONLY {{ item.stock }} LEFT</span>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- ITEM DETAILS -->
+      <div class="item-details">
+        <div class="item-top-row">
+          <p class="item-category">{{ item.category.name if item.category else 'TRADITIONAL WEAR' }}</p>
+          <div class="item-rating-wrap" style="display: flex; align-items: center; gap: 8px;">
+            <span class="item-stars" style="color: var(--clr-gold); font-size: 14px;">
+              {% set rating = item.average_rating|float %}
+              {% for i in range(1, 6) %}
+                {% if rating >= i %}
+                  <i class="fas fa-star"></i>
+                {% elif rating >= i - 0.5 and item.review_count > 0 %}
+                  <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+            </span>
+            <span style="font-size: 12px; color: var(--clr-text-muted);">{{ item.average_rating if item.review_count > 0 else '0.0' }} ({{ item.review_count }} REVIEWS)</span>
+          </div>
+        </div>
+        
+        <h1 class="item-name">{{ item.name }}</h1>
+        <p class="item-price">₹ {{ "%.0f"|format(item.price) }}</p>
+        
+        <p class="item-desc">{{ item.description or 'Premium traditional fabric crafted with cultural elegance and authentic Bodo weaving techniques.' }}</p>
+        
+        <div class="item-availability" style="margin-bottom: 40px;">
+          {% if item.stock > 0 %}
+          <span style="color: #2e7d32; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
+            <i class="fas fa-check-circle" style="margin-right: 8px;"></i> IN STOCK & READY TO SHIP
+          </span>
+          {% else %}
+          <span style="color: #d32f2f; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
+            <i class="fas fa-times-circle" style="margin-right: 8px;"></i> CURRENTLY OUT OF STOCK
+          </span>
+          {% endif %}
+        </div>
+        
+        <div class="item-actions" style="display: flex; gap: 20px; margin-bottom: 60px;">
+          {% if item.stock > 0 %}
+          <a href="/add-to-cart/{{ item.id }}" class="btn btn-dark" style="flex: 2; padding: 20px;">ADD TO CART</a>
+          <a href="/wishlist/add/{{ item.id }}" class="btn btn-outline" style="flex: 1; padding: 20px; text-align: center;">WISHLIST</a>
+          {% else %}
+          <button class="btn btn-dark" disabled style="flex: 2; padding: 20px; opacity: 0.5;">OUT OF STOCK</button>
+          <a href="{% if current_user.is_authenticated %}/wishlist/add/{{ item.id }}{% else %}/login{% endif %}" class="btn btn-outline" style="flex: 1; padding: 20px; text-align: center;">WISHLIST</a>
+          {% endif %}
+        </div>
+        
+        <div class="item-meta">
+          <div class="item-meta-row"><span>SKU</span><span>HTG-{{ item.id }}-{{ item.category_id or '0' }}</span></div>
+          <div class="item-meta-row"><span>CRAFT</span><span>AUTHENTIC HANDLOOM WEAVING</span></div>
+          <div class="item-meta-row"><span>ORIGIN</span><span>ASSAM, INDIA</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="item-reviews-section">
+      <h2 class="filter-heading" style="margin-bottom: 60px;">CUSTOMER REVIEWS</h2>
+      
+      <div class="reviews-layout">
+        <div class="reviews-list-col">
+          {% if reviews %}
+            {% for r in reviews %}
+            <div class="review-card">
+              <span class="review-stars-display">{{ '★' * r.rating }}{{ '☆' * (5 - r.rating) }}</span>
+              <p class="review-comment">"{{ r.comment }}"</p>
+              <span class="review-date">VERIFIED CUSTOMER • {{ r.created_at.strftime('%B %d, %Y') if r.created_at else '' }}</span>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-state" style="padding: 40px; border: 1px dashed var(--clr-border);">
+              <p style="margin: 0; color: var(--clr-text-muted);">No reviews yet. Be the first to share your experience with this heritage piece.</p>
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="reviews-form-col">
+          <div class="dlv-card" style="padding: 40px;">
+            {% if current_user.is_authenticated %}
+            <h3 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 12px;">SHARE YOUR THOUGHTS</h3>
+            <p style="font-size: 14px; color: var(--clr-text-muted); margin-bottom: 32px;">Your feedback helps others discover authentic craftsmanship.</p>
+            
+            <form method="POST" action="/review/{{ item.id }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--clr-text-muted);">RATING</label>
+                <select name="rating" class="form-control" style="padding: 12px;">
+                  <option value="5">★★★★★ - EXCELLENT</option>
+                  <option value="4">★★★★☆ - VERY GOOD</option>
+                  <option value="3">★★★☆☆ - GOOD</option>
+                  <option value="2">★★☆☆☆ - FAIR</option>
+                  <option value="1">★☆☆☆☆ - POOR</option>
+                </select>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 32px;">
+                <label style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--clr-text-muted);">YOUR REVIEW</label>
+                <textarea name="comment" placeholder="What did you like about this piece?" rows="5" class="form-control" style="padding: 15px;" required></textarea>
+              </div>
+              
+              <button type="submit" class="btn btn-dark" style="width: 100%; padding: 18px;">SUBMIT REVIEW</button>
+            </form>
+            {% else %}
+            <h3 style="font-family: var(--font-display); font-size: 24px; margin-bottom: 12px;">WRITE A REVIEW</h3>
+            <p style="font-size: 14px; color: var(--clr-text-muted); margin-bottom: 32px;">Please log in to share your thoughts on this heritage piece.</p>
+            <a href="/login?next=/item/{{ item.id }}" class="btn btn-dark" style="display: block; text-align: center; padding: 18px;">LOG IN TO REVIEW</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage — Traditional Bodo Wear</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <!-- ANNOUNCEMENT BAR -->
+  <div class="announcement-bar">
+    <p>New Arrivals Are Here — Discover the Royal Heritage of Assam ✨ &nbsp;|&nbsp; Free Shipping on orders above ₹999</p>
+  </div>
+
+  <!-- HEADER -->
+  <header id="mainHeader">
+    <div class="header-top">
+      <div class="header-left">
+        <button class="hamburger" onclick="openSideMenu()" aria-label="Open Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <a href="/" class="site-logo">
+        <span class="logo-letter">H</span>
+        <div class="logo-wordmark">
+          <span class="logo-word">ERITAGE</span>
+          <span class="logo-sub">Royal Heritage of Assam</span>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <div class="header-search" id="headerSearch">
+          <form action="/search" method="GET" class="search-form">
+            <input type="text" name="q" placeholder="Search for products..." id="searchInput">
+            <button type="submit" class="search-submit"><i class="fas fa-search"></i></button>
+          </form>
+          <button class="action-btn search-toggle" onclick="toggleSearch()" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <a href="{% if current_user.is_authenticated %}/wishlist{% else %}/login{% endif %}" class="action-btn" title="Wishlist">
+          <i class="far fa-heart"></i>
+        </a>
+        <a href="{% if current_user.is_authenticated %}/cart{% else %}/login{% endif %}" class="action-btn cart-action" title="Cart">
+          <i class="fas fa-shopping-bag"></i>
+          {% if cart_count is defined and cart_count > 0 %}
+          <span class="cart-badge">{{ cart_count }}</span>
+          {% endif %}
+        </a>
+        {% if current_user.is_authenticated %}
+        <button class="action-btn avatar-btn" onclick="toggleSidebar()" title="My Account">
+          <img src="{{ img_src(current_user.profile_photo) }}" class="profile-avatar" alt="Account">
+        </button>
+        {% else %}
+        <a href="/login" class="action-btn login-link">LOGIN</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="/category/0" class="nav-link">All Products</a></li>
+        <li class="nav-item has-dropdown">
+          <a href="/category/1" class="nav-link">For Him</a>
+          <div class="mega-dropdown">
+            <div class="mega-col">
+              <h5>Categories</h5>
+              <a href="/category/1">Dokhona Sets</a>
+              <a href="/category/1">Traditional Kurtas</a>
+              <a href="/category/1">Gamocha</a>
+              <a href="/category/1">Traditional Dhotis</a>
+            </div>
+            <div class="mega-col">
+              <h5>Collections</h5>
+              <a href="/category/1">Festive</a>
+              <a href="/category/1">Wedding</a>
+              <a href="/category/1">Casual</a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item has-dropdown">
+          <a href="/category/2" class="nav-link">For Her</a>
+          <div class="mega-dropdown">
+            <div class="mega-col">
+              <h5>Categories</h5>
+              <a href="/category/2">Dokhona Sets</a>
+              <a href="/category/2">Kurtas & Tops</a>
+              <a href="/category/2">Mekhela Chador</a>
+              <a href="/category/2">Dress Material</a>
+            </div>
+            <div class="mega-col">
+              <h5>Collections</h5>
+              <a href="/category/2">Festive</a>
+              <a href="/category/2">Wedding</a>
+              <a href="/category/2">Workwear</a>
+              <a href="/category/2">Casual</a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item"><a href="/category/3" class="nav-link">Jewellery</a></li>
+        <li class="nav-item"><a href="/category/4" class="nav-link">Others</a></li>
+        <li class="nav-item"><a href="/story" class="nav-link">Blogs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- SEARCH OVERLAY -->
+  <!-- SEARCH OVERLAY REMOVED FOR STABILITY -->
+
+  <!-- SIDE MENU -->
+  <div id="sideMenu" class="side-menu">
+    <div class="side-menu-header">
+      <span class="side-logo">HERITAGE</span>
+      <button class="close-btn" onclick="closeMenus()">×</button>
+    </div>
+    <div class="side-menu-body">
+      <a href="/category/0" class="side-link">All Products</a>
+      <a href="/category/1" class="side-link">For Him</a>
+      <a href="/category/2" class="side-link">For Her</a>
+      <a href="/category/3" class="side-link">Jewellery</a>
+      <a href="/category/4" class="side-link">Others</a>
+      <div class="side-divider"></div>
+      <a href="/story" class="side-link side-link--small">Blogs</a>
+      <a href="/faq" class="side-link side-link--small">FAQs</a>
+      <a href="/privacy" class="side-link side-link--small">Privacy Policy</a>
+      <a href="/terms" class="side-link side-link--small">Terms</a>
+      <a href="/contact_us" class="side-link side-link--small">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeMenus()"></div>
+
+  {% if current_user.is_authenticated %}
+  <!-- ACCOUNT SIDEBAR -->
+  <div id="accountSidebar" class="account-sidebar">
+    <button class="close-sidebar" onclick="closeSidebar()">×</button>
+    <div class="account-header">
+      <img src="{{ img_src(current_user.profile_photo) }}" class="account-photo" alt="Profile">
+      <h3>{{ current_user.username }}</h3>
+      <p>{{ current_user.email }}</p>
+    </div>
+    <nav class="account-nav">
+      <a href="/dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+      <a href="/my-orders"><i class="fas fa-box"></i> My Orders</a>
+      <a href="/wishlist"><i class="far fa-heart"></i> Wishlist</a>
+      <a href="/help"><i class="fas fa-headset"></i> Help Center</a>
+      <a href="/feedback"><i class="fas fa-comment-alt"></i> Feedback</a>
+    </nav>
+    <div class="account-info-nav">
+      <h5>INFORMATION</h5>
+      <a href="/terms">Terms & Conditions</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/licenses">Licenses</a>
+      <a href="/faq">Browse FAQs</a>
+    </div>
+    <div class="logout-section">
+      <a href="/logout" class="logout-btn">LOGOUT</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- FLASH MESSAGES -->
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="global-flash">
+    {% for message in messages %}
+    <p><i class="fas fa-check-circle"></i> {{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-col">
+        <div class="footer-logo">HERITAGE</div>
+        <p class="footer-tagline">Celebrating the elegance of traditional Bodo craftsmanship through modern digital fashion.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <a href="/category/0">All Products</a>
+        <a href="/category/1">For Him</a>
+        <a href="/category/2">For Her</a>
+        <a href="/category/3">Jewellery</a>
+        <a href="/category/4">Others</a>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <a href="/faq">FAQs</a>
+        <a href="/help">Help Center</a>
+        <a href="/feedback">Feedback</a>
+        <a href="/contact_us">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="/story">Our Story</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms & Conditions</a>
+        <a href="/licenses">Licenses</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Heritage Traditional Wear. All rights reserved.</p>
+      <p>Crafted with cultural pride in Assam, India</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleSearch() {
+      const s = document.getElementById('headerSearch');
+      s.classList.toggle('active');
+      if (s.classList.contains('active')) {
+        setTimeout(() => document.getElementById('searchInput').focus(), 300);
+      }
+    }
+    function openSideMenu() {
+      document.getElementById('sideMenu').classList.add('active');
+      document.getElementById('sidebarOverlay').classList.add('active');
+      document.body.classList.add('no-scroll');
+    }
+    function closeMenus() {
+      document.getElementById('sideMenu').classList.remove('active');
+      const acc = document.getElementById('accountSidebar');
+      if (acc) acc.classList.remove('active');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    }
+    function toggleSidebar() {
+      const s = document.getElementById('accountSidebar');
+      const o = document.getElementById('sidebarOverlay');
+      if (s) { s.classList.toggle('active'); o.classList.toggle('active'); document.body.classList.toggle('no-scroll'); }
+    }
+    function closeSidebar() {
+      const s = document.getElementById('accountSidebar');
+      if (s) s.classList.remove('active');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    }
+    const header = document.getElementById('mainHeader');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 60));
+    setTimeout(() => { const f = document.querySelector('.global-flash'); if (f) { f.style.opacity = '0'; setTimeout(() => f.remove(), 400); } }, 4000);
+  </script>
+
+</body>
+</html>

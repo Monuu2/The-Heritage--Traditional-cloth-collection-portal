@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Heritage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Calibri', 'Trebuchet MS', Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f3ea;
+            color: #2d281f;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-login-wrap {
+            width: 420px;
+            border: 1px solid #ded4c1;
+            padding: 50px 40px;
+            background: #fffaf0;
+            box-shadow: 0 24px 70px rgba(45, 40, 31, 0.10);
+        }
+
+        .admin-login-brand {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .admin-login-brand h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 22px;
+            letter-spacing: 8px;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+
+        .admin-login-brand p {
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: #746a5d;
+        }
+
+        .admin-login-brand .shield {
+            font-size: 28px;
+            margin-bottom: 16px;
+            color: #b88918;
+        }
+
+        .flash-box {
+            background: #fff3cd;
+            border: 1px solid #efd275;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: #6f5209;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #746a5d;
+            margin-bottom: 8px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 13px 14px;
+            background: #fffdf8;
+            border: 1px solid #ded4c1;
+            color: #2d281f;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Calibri', Arial, sans-serif;
+        }
+
+        .field input:focus {
+            border-color: #b88918;
+        }
+
+        .field .input-wrap {
+            position: relative;
+        }
+
+        .field .toggle-pw {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #8a640e;
+            font-size: 14px;
+        }
+
+        .field .toggle-pw:hover {
+            color: #8a640e;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #facc15;
+            color: #201a0c;
+            border: none;
+            font-size: 11px;
+            letter-spacing: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+            font-family: 'Calibri', Arial, sans-serif;
+        }
+
+        .login-btn:hover {
+            background: #e7b90e;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #746a5d;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #8a640e;
+        }
+
+        .security-note {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 11px;
+            color: #8a8174;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-login-wrap">
+
+        <div class="admin-login-brand">
+            <div class="shield"><i class="fas fa-shield-halved"></i></div>
+            <h1>HERITAGE</h1>
+            <p>ADMIN PANEL</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-box">
+            {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/admin/login">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="field">
+                <label>EMAIL ADDRESS</label>
+                <input type="email" name="email" placeholder="example@email.com" required autofocus>
+            </div>
+
+            <div class="field">
+                <label>PASSWORD</label>
+                <div class="input-wrap">
+                    <input type="password" name="password" id="pw-field" placeholder="••••••••" required>
+                    <span class="toggle-pw" onclick="togglePw()">
+                        <i class="far fa-eye" id="pw-icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">ACCESS DASHBOARD</button>
+        </form>
+
+        <a href="/" class="back-link">← Back to Store</a>
+
+        <p class="security-note">🔒 Restricted area. Authorised personnel only.</p>
+
+    </div>
+
+    <script>
+        function togglePw() {
+            const input = document.getElementById('pw-field');
+            const icon = document.getElementById('pw-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'far fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'far fa-eye';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

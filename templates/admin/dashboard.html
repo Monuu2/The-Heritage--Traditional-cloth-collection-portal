@@ -1,0 +1,115 @@
+{% extends "admin_layout.html" %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="adm-stats">
+  <div class="adm-stat">
+    <div class="adm-stat-icon"><i class="fas fa-users"></i></div>
+    <div class="adm-stat-label">CUSTOMERS</div>
+    <div class="adm-stat-val">{{ users }}</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-icon"><i class="fas fa-tshirt"></i></div>
+    <div class="adm-stat-label">PRODUCTS</div>
+    <div class="adm-stat-val">{{ products }}</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-icon"><i class="fas fa-shopping-bag"></i></div>
+    <div class="adm-stat-label">ORDERS</div>
+    <div class="adm-stat-val">{{ orders }}</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-icon"><i class="fas fa-eye"></i></div>
+    <div class="adm-stat-label">VISITORS</div>
+    <div class="adm-stat-val">{{ visitors }}</div>
+  </div>
+  <div class="adm-stat" style="border-left:3px solid #2e7d32;">
+    <div class="adm-stat-icon"><i class="fas fa-rupee-sign" style="color:#2e7d32;"></i></div>
+    <div class="adm-stat-label">TOTAL EARNINGS</div>
+    <div class="adm-stat-val" style="color:#2e7d32;">₹ {{ "%.0f"|format(total_earning) }}</div>
+  </div>
+</div>
+
+<div class="adm-charts-grid">
+  <div class="adm-chart-card">
+    <h4>MONTHLY SALES (ORDERS)</h4>
+    <canvas id="salesChart" style="max-height:220px;"></canvas>
+  </div>
+  <div class="adm-chart-card">
+    <h4>MONTHLY REVENUE (₹)</h4>
+    <canvas id="revenueChart" style="max-height:220px;"></canvas>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+  <div class="adm-table-wrap">
+    <div class="adm-table-header">
+      <h3>TOP SELLING PRODUCTS</h3>
+    </div>
+    <table class="adm-table">
+      <thead><tr><th>PRODUCT</th><th>SOLD</th></tr></thead>
+      <tbody>
+        {% for p in top_products %}
+        <tr>
+          <td style="display:flex;align-items:center;gap:12px;">
+            <img src="{{ img_src(p.image_url) }}">
+            {{ p.name }}
+          </td>
+          <td><span class="adm-badge badge-success">{{ p.qty }} units</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2" style="color:#aaa;text-align:center;">No sales yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="adm-table-wrap">
+    <div class="adm-table-header">
+      <h3>RECENT ORDERS</h3>
+      <a href="{{ url_for('admin.orders') }}" style="font-size:11px;color:#aaa;text-decoration:none;letter-spacing:1px;">View All →</a>
+    </div>
+    <table class="adm-table">
+      <thead><tr><th>ORDER</th><th>TOTAL</th><th>STATUS</th></tr></thead>
+      <tbody>
+        {% for order in recent_orders %}
+        <tr>
+          <td>#{{ '%05d'|format(order.id) }}</td>
+          <td>₹ {{ order.total_price }}</td>
+          <td>
+            {% if order.status == 'Placed' %}<span class="adm-badge badge-info">{{ order.status }}</span>
+            {% elif order.status == 'Delivered' %}<span class="adm-badge badge-success">{{ order.status }}</span>
+            {% elif order.status == 'Cancelled' %}<span class="adm-badge badge-danger">{{ order.status }}</span>
+            {% else %}<span class="adm-badge badge-warning">{{ order.status }}</span>{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" style="color:#aaa;text-align:center;">No orders yet</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const salesData = {{ monthly_sales | tojson | safe }};
+const revenueData = {{ monthly_revenue | tojson | safe }};
+
+new Chart(document.getElementById("salesChart"), {
+  type: "bar",
+  data: { labels: months, datasets: [{ label: "Orders", data: salesData, backgroundColor: "#1a1a1a", borderRadius: 4 }] },
+  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+});
+
+new Chart(document.getElementById("revenueChart"), {
+  type: "line",
+  data: { labels: months, datasets: [{ label: "Revenue", data: revenueData, borderColor: "#2e7d32", backgroundColor: "rgba(46,125,50,0.08)", fill: true, tension: 0.4, pointRadius: 3 }] },
+  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+</script>
+
+{% endblock %}

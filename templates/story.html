@@ -1,0 +1,961 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Boro Heritage Story Page -->
+<div class="story-wrapper">
+
+    <section class="hero-story">
+        <div class="hero-story-content">
+            <p class="story-kicker">EXPLORING THE INDIGENOUS LEGACY</p>
+            <h1>The Soul of Boro Heritage</h1>
+            <p>
+                A journey through the ancient history, vibrant culture, and timeless
+                weaving traditions of the Boro people of Assam.
+            </p>
+            <div class="hero-actions">
+                <a href="/category/0" class="hero-market-btn">Explore The Legacy</a>
+                <button type="button" onclick="scrollToBlogs()">Start the Journey</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="blogs-section">
+        <div class="story-section-title">
+            <h2>The Cultural Chronicles</h2>
+            <p>Unveiling the layers of identity, faith, and craftsmanship.</p>
+        </div>
+
+        <div class="story-search-box">
+            <input type="text" id="storySearchInput" placeholder="Search heritage stories...">
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+
+            <!-- Article 1: Origins -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/62/13/76/pillars-at-kachari-ruins.jpg?w=1200&h=1200&s=1"
+                        alt="Boro Origins">
+                    <span class="blog-category">History</span>
+                </div>
+                <div class="blog-content">
+                    <h3>The Kachari Legacy</h3>
+                    <p>
+                        The Boro people are the largest ethnolinguistic group in Assam, tracing their roots back to the
+                        ancient Kachari Kingdom...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>The Kachari Legacy: Roots of the Bodo People</h2>
+                        <p>The Boro (or Bodo) people represent one of the oldest indigenous communities of Northeast
+                            India. As a part of the Tibeto-Burman family, their presence in the Brahmaputra valley dates
+                            back thousands of years. Historical records and folklore link them to the powerful Kachari
+                            Kingdom, which once ruled vast territories in Assam.</p>
+                        <p>The name 'Kachari' was a term used by outsiders to describe the diverse group of
+                            Bodo-speaking tribes. Under the Kachari kings, the community developed advanced systems of
+                            administration, agriculture, and defense. Even after the fall of the kingdom, the Boro
+                            people maintained their distinct identity, language, and cultural autonomy.</p>
+                        <p>Today, they are recognized as the earliest settlers of the region, and their heritage
+                            continues to influence the social and cultural fabric of modern Assam.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Read the History</button>
+                </div>
+            </article>
+
+            <!-- Article 2: Attire (Dokhona) -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/A_Boro_woman_weaving_a_traditional_Dokhona.jpg/250px-A_Boro_woman_weaving_a_traditional_Dokhona.jpg"
+                        alt="Dokhona">
+                    <span class="blog-category">Textiles</span>
+                </div>
+                <div class="blog-content">
+                    <h3>The Art of Dokhona</h3>
+                    <p>
+                        More than just a garment, the Dokhona is a symbol of Boro identity. Worn primarily by women...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>Dokhona: The Fabric of Identity</h2>
+                        <p>The Dokhona is the most iconic traditional attire of Boro women. It is a wrap-around dress,
+                            typically five to six feet long, crafted with immense precision on household handlooms. What
+                            makes a Dokhona truly special are the 'Agors' or patterns woven into it.</p>
+                        <p>The most famous pattern is the 'Hajw Agor' (mountain pattern), which symbolizes the rugged
+                            beauty of the Boro landscape. Other popular motifs include 'Mwigon Agor' (vegetable/flower
+                            motifs) and 'Daothu Agor' (pigeon heart). Historically, the quality of a woman's weaving was
+                            considered a reflection of her patience and skill.</p>
+                        <p>In modern fashion, the Dokhona has evolved. While the traditional yellow (Gwmw) remains a
+                            festive favorite, contemporary weavers experiment with vibrant silks and complex color
+                            palettes to suit global tastes.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Explore Patterns</button>
+                </div>
+            </article>
+
+            <!-- Article 3: Aronai -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://m.media-amazon.com/images/I/71mHPRr56eL._AC_UY1100_.jpg" alt="Aronai">
+                    <span class="blog-category">Tradition</span>
+                </div>
+                <div class="blog-content">
+                    <h3>Aronai: The Scarf of Honor</h3>
+                    <p>
+                        The Aronai is a small yet powerful cultural symbol. It is gifted as a token of love...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>Aronai: A Symbol of Respect and Love</h2>
+                        <p>The Aronai is a traditional Boro scarf, small in size but immense in cultural significance.
+                            It is an essential part of Boro hospitality. When a guest arrives, gifting an Aronai is the
+                            highest form of respect. It is also an integral part of the 'Bagurumba' folk dance, where
+                            dancers gracefully wave the scarf.</p>
+                        <p>The patterns on an Aronai are strictly geometric, often featuring the 'Agor' that represents
+                            Boro craftsmanship. During winters, it serves as a warm wrap, and during festivals, it is
+                            worn with pride as a ceremonial accessory.</p>
+                        <p>For the Boro people, the Aronai is not just cloth; it is a thread that binds the community
+                            together in a spirit of mutual respect and heritage.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Symbolism</button>
+                </div>
+            </article>
+
+            <!-- Article 4: Religion (Bathouism) -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBZEk2nmP893-W9rRgiepWS7-degOD2JMslQ&s"
+                        alt="Bathouism">
+                    <span class="blog-category">Faith</span>
+                </div>
+                <div class="blog-content">
+                    <h3>Bathou: The Five Elements</h3>
+                    <p>
+                        Boro spirituality is centered around 'Bathouism', where the Sijou plant is worshipped...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>Bathou: The Ancient Philosophy</h2>
+                        <p>Bathouism is the indigenous religion of the Boro people. The word 'Bathou' translates to
+                            'Five' (Ba) and 'Deep' (Thou), representing the five basic elements of nature: Earth, Water,
+                            Air, Fire, and Sky. The central symbol of this faith is the 'Sijou' (Euphorbia splendens)
+                            plant, which is traditionally planted in the courtyard of every Boro home.</p>
+                        <p>The Sijou plant is surrounded by a circular bamboo fence called the 'Sijou-Masari', which has
+                            five layers representing the five principles of the faith. Bathouism emphasizes a simple,
+                            harmonious life in sync with the natural world.</p>
+                        <p>Even today, despite many modern influences, the core philosophy of Bathou remains a guiding
+                            light for Boro ethics, rituals, and community gatherings.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Faith & Philosophy</button>
+                </div>
+            </article>
+
+            <!-- Article 5: Festivals (Bwisagu) -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpqx-0j9YbS4cOkchsUFgWKHWlsUfLJtTP9w&s"
+                        alt="Bwisagu">
+                    <span class="blog-category">Celebration</span>
+                </div>
+                <div class="blog-content">
+                    <h3>Bwisagu: The Spring Festival</h3>
+                    <p>
+                        Celebrating the Boro New Year, Bwisagu is a time of joy, folk songs, and the iconic...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>Bwisagu: The Rhythms of Spring</h2>
+                        <p>Bwisagu is the most important festival of the Boro community, celebrated during the mid-April
+                            period to mark the Boro New Year. It is a vibrant celebration that coincides with the
+                            arrival of spring and the beginning of the agricultural season.</p>
+                        <p>The festival begins with 'Goru Bwisagu' (worship of cows), followed by days of community
+                            feasting, traditional music on the 'Sifung' (flute) and 'Kham' (drum), and the world-famous
+                            'Bagurumba' dance. The dance is characterized by butterfly-like movements that mimic the
+                            spirit of spring.</p>
+                        <p>Bwisagu is more than just a party; it is a prayer for a good harvest, a celebration of
+                            community brotherhood, and a time to seek the blessings of elders.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Join the Dance</button>
+                </div>
+            </article>
+
+            <!-- Article 6: Weaving -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1q6Q-EJd8PClroy6Qi-rq2qjxS9ZGxXCUXQ&s"
+                        alt="Handloom">
+                    <span class="blog-category">Craft</span>
+                </div>
+                <div class="blog-content">
+                    <h3>The Household Handloom</h3>
+                    <p>
+                        In every Boro home, the rhythmic sound of the handloom tells a story...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>The Heritage Loom: A Living Legacy</h2>
+                        <p>The handloom is the heartbeat of Boro households. For centuries, Boro women have been master
+                            weavers, spinning their own threads from Eri and Muga silks and weaving them into garments
+                            that last a lifetime. In traditional society, a woman's skill at the loom was a mark of her
+                            maturity and character.</p>
+                        <p>The 'Salu' (loom) is a simple wooden structure, but the complexity of the patterns it
+                            produces is staggering. Weavers use a technique called 'Agor Phwnai' to create designs by
+                            hand, without any mechanical assistance. This results in textiles that have a unique texture
+                            and soulful quality.</p>
+                        <p>By supporting authentic Boro handlooms, we are not just buying clothes; we are helping to
+                            preserve a thousand-year-old sustainable industry that empowers rural women and keeps an
+                            ancient art form alive.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">The Weaving Process</button>
+                </div>
+            </article>
+
+            <!-- Article 7: Language -->
+            <article class="blog-card">
+                <div class="blog-img-frame">
+                    <img src="https://www.ritiriwaz.com/wp-content/uploads/2020/10/Bodo-Language.jpg"
+                        alt="Bodo Language">
+                    <span class="blog-category">Identity</span>
+                </div>
+                <div class="blog-content">
+                    <h3>The Bodo Language</h3>
+                    <p>
+                        The Bodo language, written in the Devanagari script, is one of the 22 scheduled languages...
+                    </p>
+                    <div class="blog-full-content" style="display:none;">
+                        <h2>The Bodo Language: Roots and Resilience</h2>
+                        <p>The Bodo language is one of the ancient Tibeto-Burman languages of India. Despite centuries
+                            of linguistic pressure, it has survived and thrived, eventually becoming one of the 22
+                            official languages of the Republic of India. Originally spoken in several dialects, modern
+                            Bodo is now standardized and written in the Devanagari script.</p>
+                        <p>Boro literature is rich with 'Khornai' (folklore) and 'Menthai' (folk songs) that have been
+                            passed down through generations. These stories often speak of the origins of the world, the
+                            spirits of the mountains, and the bravery of legendary heroes.</p>
+                        <p>Preserving the Bodo language is essential to preserving the Boro people's soul. It is the
+                            vessel that carries their history, their philosophy, and their unique way of looking at the
+                            world.</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openFullArticle(this)">Language & Roots</button>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Detailed Section: Heritage Craft -->
+    <section class="craft-detailed">
+        <div class="craft-img-container">
+            <img src="https://www.iiad.edu.in/wp-content/uploads/2025/09/imageiiad1.webp" alt="Artisan Weaving">
+            <div class="craft-badge">AUTHENTIC CRAFT</div>
+        </div>
+
+        <div class="craft-info-text">
+            <h2>Preserving the <span>Indigenous</span> Loom</h2>
+            <p>
+                The Boro people have long been known for their expertise in sericulture and weaving.
+                Unlike many other cultures where weaving moved to factories, Boro households still maintain
+                the tradition of the <em>Salu</em> (loom). Each pattern is a dialogue between the weaver and
+                their ancestry.
+            </p>
+
+            <div class="story-stats">
+                <div class="stat-item">
+                    <span class="stat-num">200+</span>
+                    <span class="stat-lab">Traditional Motifs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-lab">Organic Silk & Cotton</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">Infinite</span>
+                    <span class="stat-lab">Cultural Pride</span>
+                </div>
+            </div>
+
+            <a href="/category/0" class="shop-heritage-btn">Wear the Heritage</a>
+        </div>
+    </section>
+
+</div>
+
+<!-- ARTICLE READER MODAL -->
+<div id="articleModal" class="article-modal">
+    <div class="modal-overlay" onclick="closeFullArticle()"></div>
+    <div class="modal-body">
+        <button class="modal-close" onclick="closeFullArticle()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div id="modalContent" class="modal-inner">
+            <!-- Content injected here -->
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ── Story Page Premium B&W + Babypink Styles ── */
+    .story-wrapper {
+        background: var(--dark-main);
+        color: var(--text-dark-main);
+        overflow-x: hidden;
+        transition: background 0.4s ease;
+    }
+
+    body.light-mode .story-wrapper {
+        background: var(--bg-main);
+        color: var(--text-main);
+    }
+
+    /* Hero Section */
+    .hero-story {
+        position: relative;
+        height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 20px;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .hero-story::before {
+        content: "";
+        position: absolute;
+        inset: -8%;
+        background: url('https://upload.wikimedia.org/wikipedia/commons/3/36/Bodo_dance.jpg') center/cover;
+        transform: scale(1.12) translate3d(-14%, 0, 0);
+        animation: heroImageFromLeft 14s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        z-index: -2;
+    }
+
+    .hero-story::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 50% 38%, rgba(250, 204, 21, 0.14), transparent 28%),
+            linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.88));
+        animation: heroGlowPulse 7s ease-in-out infinite;
+        z-index: -1;
+    }
+
+    body.light-mode .hero-story::after {
+        background:
+            radial-gradient(circle at 50% 38%, rgba(250, 204, 21, 0.18), transparent 30%),
+            linear-gradient(rgba(24, 18, 8, 0.34), rgba(16, 12, 6, 0.78));
+    }
+
+    .hero-story-content {
+        max-width: 850px;
+        animation: storyFadeInUp 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .story-kicker {
+        font-size: 11px;
+        letter-spacing: 7px;
+        color: #facc15;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-weight: 700;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: heroTextReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.15s;
+    }
+
+    .hero-story h1 {
+        font-size: 72px;
+        font-weight: 200;
+        letter-spacing: 15px;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        color: #ffffff;
+        line-height: 1.1;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: heroTextReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.35s;
+    }
+
+    body.light-mode .hero-story h1 {
+        color: #ffffff !important;
+    }
+
+    body.light-mode .hero-story .story-kicker {
+        color: #ffffff !important;
+    }
+
+    .hero-story p {
+        font-size: 19px;
+        color: #d1d1d1;
+        line-height: 1.9;
+        letter-spacing: 1px;
+        font-weight: 300;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: heroTextReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.58s;
+    }
+
+    body.light-mode .hero-story p {
+        color: #ffffff !important;
+    }
+
+    .hero-actions {
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: heroTextReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.82s;
+    }
+
+    .hero-story button,
+    .hero-market-btn {
+        min-width: 210px;
+        padding: 18px 45px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: transparent;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-market-btn {
+        background: #fff;
+        color: #000;
+    }
+
+    .hero-story button:hover,
+    .hero-market-btn:hover {
+        background: #facc15;
+        border-color: #facc15;
+        color: #000;
+        letter-spacing: 6px;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(250, 204, 21, 0.2);
+    }
+
+    body.light-mode .hero-story button:hover,
+    body.light-mode .hero-market-btn:hover {
+        background: #000000;
+        border-color: #000000;
+        color: #ffffff;
+    }
+
+    /* Blogs Section */
+    .story-wrapper section {
+        padding: 120px 8%;
+    }
+
+    .story-section-title {
+        text-align: center;
+        margin-bottom: 70px;
+    }
+
+    .story-section-title h2 {
+        font-size: 48px;
+        font-weight: 200;
+        margin-bottom: 15px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        color: #ffffff;
+    }
+
+    body.light-mode .story-section-title h2 {
+        color: #000000;
+    }
+
+    .story-section-title p {
+        color: #a1a1aa;
+        font-size: 15px;
+        letter-spacing: 2px;
+    }
+
+    body.light-mode .story-section-title p {
+        color: #4b5563;
+    }
+
+    /* Search */
+    .story-search-box {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 80px;
+    }
+
+    .story-search-box input {
+        width: 100%;
+        max-width: 500px;
+        padding: 20px 30px;
+        border-radius: 0;
+        border: 1px solid #ff66b2;
+        background: rgba(0, 0, 0, 0.4);
+        color: #ffffff;
+        outline: none;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    body.light-mode .story-search-box input {
+        background: #ffffff;
+        color: #000000;
+        border-color: #000000;
+    }
+
+    .story-search-box input:focus {
+        background: #000000;
+        box-shadow: 0 0 20px rgba(255, 102, 178, 0.2);
+    }
+
+    body.light-mode .story-search-box input:focus {
+        border-color: #ff66b2;
+        box-shadow: 0 0 20px rgba(255, 102, 178, 0.1);
+    }
+
+    /* Blog Grid */
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 50px;
+    }
+
+    .blog-card {
+        background: var(--dark-card);
+        border: 1px solid #ff66b2;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        opacity: 0;
+        transform: translateY(40px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    body.light-mode .blog-card {
+        background: #ffffff;
+        border-color: #d1d5db;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .blog-card.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .blog-img-frame {
+        position: relative;
+        height: 280px;
+        overflow: hidden;
+    }
+
+    .blog-img-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .blog-category {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #ff66b2;
+        color: #000000;
+        padding: 6px 15px;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .blog-card:hover .blog-img-frame img {
+        transform: scale(1.1);
+    }
+
+    .blog-content {
+        padding: 35px 30px;
+    }
+
+    .blog-content h3 {
+        font-size: 26px;
+        font-weight: 400;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+        color: #ffffff;
+        font-family: 'Times New Roman', serif;
+    }
+
+    body.light-mode .blog-content h3 {
+        color: #000000;
+    }
+
+    .blog-content p {
+        color: #a1a1aa;
+        line-height: 1.8;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+
+    body.light-mode .blog-content p {
+        color: #4b5563;
+    }
+
+    .read-more-btn {
+        background: transparent;
+        border: none;
+        color: #ff66b2;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.3s ease;
+        width: fit-content;
+    }
+
+    .read-more-btn:hover {
+        letter-spacing: 5px;
+        color: #ffffff;
+    }
+
+    body.light-mode .read-more-btn:hover {
+        color: #000000;
+    }
+
+    /* Detailed Section */
+    .craft-detailed {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+        background: #0a0a0a !important;
+        border-top: 1px solid #ff66b2;
+        border-bottom: 1px solid #ff66b2;
+    }
+
+    body.light-mode .craft-detailed {
+        background: #ffffff !important;
+        border-color: #000000;
+    }
+
+    .craft-img-container {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ff66b2;
+    }
+
+    .craft-img-container img {
+        width: 100%;
+        display: block;
+    }
+
+    .craft-badge {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        background: #ff66b2;
+        color: #000000;
+        padding: 10px 20px;
+        font-size: 10px;
+        letter-spacing: 3px;
+        font-weight: 700;
+    }
+
+    .craft-info-text h2 {
+        font-size: 54px;
+        font-weight: 200;
+        margin-bottom: 30px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: #ffffff;
+    }
+
+    body.light-mode .craft-info-text h2 {
+        color: #000000;
+    }
+
+    .craft-info-text span {
+        color: #ff66b2;
+    }
+
+    .craft-info-text p {
+        color: #a1a1aa;
+        font-size: 17px;
+        line-height: 1.9;
+        margin-bottom: 40px;
+        font-weight: 300;
+    }
+
+    body.light-mode .craft-info-text p {
+        color: #4b5563;
+    }
+
+    .story-stats {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .stat-num {
+        font-size: 36px;
+        font-weight: 600;
+        color: #ff66b2;
+    }
+
+    .stat-lab {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: #71717a;
+        text-transform: uppercase;
+    }
+
+    .shop-heritage-btn {
+        display: inline-block;
+        padding: 18px 40px;
+        background: #ff66b2;
+        color: #000000;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        transition: all 0.4s ease;
+    }
+
+    .shop-heritage-btn:hover {
+        background: #ffffff;
+        transform: translateY(-3px);
+        color: #000000;
+    }
+
+    body.light-mode .shop-heritage-btn:hover {
+        background: #000000;
+        color: #ffffff;
+    }
+
+    /* Article Modal */
+    .article-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: flex-end;
+        overflow: hidden;
+    }
+
+    .modal-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        animation: modalFadeIn 0.5s ease;
+    }
+
+    .modal-body {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 100%;
+        background: #000000;
+        border-left: 2px solid #ff66b2;
+        padding: 80px 60px;
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    body.light-mode .modal-body {
+        background: #ffffff;
+        border-left-color: #000000;
+    }
+
+    .article-modal.active {
+        display: flex;
+    }
+
+    .article-modal.active .modal-body {
+        transform: translateX(0);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: none;
+        border: none;
+        color: #ff66b2;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+    .modal-close:hover {
+        transform: rotate(90deg) scale(1.2);
+    }
+
+    .modal-inner h2 {
+        font-size: 36px;
+        font-weight: 200;
+        letter-spacing: 4px;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        color: #ff66b2;
+        font-family: 'Times New Roman', serif;
+        line-height: 1.2;
+    }
+
+    .modal-inner p {
+        font-size: 16px;
+        line-height: 2;
+        color: #d1d1d1;
+        margin-bottom: 24px;
+    }
+
+    body.light-mode .modal-inner p {
+        color: #4b5563;
+    }
+
+    @keyframes heroImageFromLeft {
+        0% { transform: scale(1.12) translate3d(-14%, 0, 0); }
+        42% { transform: scale(1.08) translate3d(0, 0, 0); }
+        100% { transform: scale(1.1) translate3d(1.5%, 0, 0); }
+    }
+
+    @keyframes heroGlowPulse {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; }
+    }
+
+    @keyframes storyFadeInUp {
+        from { opacity: 0; transform: translateY(34px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroTextReveal {
+        from { opacity: 0; transform: translateY(24px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes modalFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @media (max-width: 1000px) {
+        .craft-detailed {
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+
+        .hero-story h1 {
+            font-size: 52px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .hero-story h1 {
+            font-size: 38px;
+            letter-spacing: 8px;
+        }
+
+        .story-wrapper section {
+            padding: 80px 20px;
+        }
+
+        .story-stats {
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .hero-actions {
+            width: 100%;
+        }
+
+        .hero-story button,
+        .hero-market-btn {
+            width: min(100%, 320px);
+        }
+    }
+</style>
+
+<script>
+    function openFullArticle(btn) {
+        const card = btn.closest('.blog-card');
+        const content = card.querySelector('.blog-full-content').innerHTML;
+        const modal = document.getElementById('articleModal');
+        const modalInner = document.getElementById('modalContent');
+
+        modalInner.innerHTML = content;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFullArticle() {
+        const modal = document.getElementById('articleModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function scrollToBlogs() {
+        const el = document.getElementById('blogs-section');
+        if (el) {
+            const offset = 80; // for fixed header
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = el.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    function initStoryAnimations() {
+        const cards = document.querySelectorAll('.blog-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        cards.forEach(card => observer.observe(card));
+    }
+
+    // Initialize search
+    const storySearchInput = document.getElementById('storySearchInput');
+    if (storySearchInput) {
+        storySearchInput.addEventListener('keyup', () => {
+            const value = storySearchInput.value.toLowerCase();
+            const blogCards = document.querySelectorAll('.blog-card');
+            blogCards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(value) ? 'flex' : 'none';
+            });
+        });
+    }
+
+    // Run animations on load
+    document.addEventListener('DOMContentLoaded', initStoryAnimations);
+    initStoryAnimations();
+</script>
+
+{% endblock %}

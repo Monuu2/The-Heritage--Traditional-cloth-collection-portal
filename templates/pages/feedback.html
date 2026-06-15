@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="info-page">
+  <div class="info-header">
+    <h1>SEND FEEDBACK</h1>
+    <p>Your thoughts help us serve the community better</p>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="flash-msg">{% for m in messages %}<p>{{ m }}</p>{% endfor %}</div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="feedback-wrap">
+    <form method="POST" class="feedback-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="form-group">
+        <label>SUBJECT</label>
+        <input type="text" name="subject" placeholder="What is your feedback about?" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label>RATING</label>
+        <div class="star-row">
+          <input type="radio" name="rating" value="5" id="s5"><label for="s5">★</label>
+          <input type="radio" name="rating" value="4" id="s4"><label for="s4">★</label>
+          <input type="radio" name="rating" value="3" id="s3"><label for="s3">★</label>
+          <input type="radio" name="rating" value="2" id="s2"><label for="s2">★</label>
+          <input type="radio" name="rating" value="1" id="s1"><label for="s1">★</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>YOUR MESSAGE</label>
+        <textarea name="message" rows="6" placeholder="Tell us what you think — your experience, suggestions, or anything on your mind." class="form-control" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-dark">SUBMIT FEEDBACK</button>
+    </form>
+
+    <div class="feedback-aside">
+      <h3>WHY YOUR FEEDBACK MATTERS</h3>
+      <p>Heritage is built to preserve the rich tradition of Bodo craftsmanship. Your feedback directly helps us improve the experience for every visitor and support the artisans behind each piece.</p>
+      <div class="fb-apart-item">
+        <span>📦</span>
+        <p>Delivery experience</p>
+      </div>
+      <div class="fb-apart-item">
+        <span>🧵</span>
+        <p>Product quality & authenticity</p>
+      </div>
+      <div class="fb-apart-item">
+        <span>💬</span>
+        <p>Website & shopping experience</p>
+      </div>
+      <div class="fb-apart-item">
+        <span>🤝</span>
+        <p>Customer support</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}

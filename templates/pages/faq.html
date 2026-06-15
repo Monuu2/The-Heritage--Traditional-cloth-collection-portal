@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="info-page">
+  <div class="info-header">
+    <h1>FREQUENTLY ASKED QUESTIONS</h1>
+    <p>Everything you need to know about Heritage</p>
+  </div>
+
+  <div class="faq-list">
+
+    <div class="faq-group">
+      <h4 class="faq-group-title">ORDERS & DELIVERY</h4>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long does delivery take? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Delivery usually takes 3–7 working days depending on your location. Remote areas in Northeast India may take up to 10 days.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How do I track my order? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">You can track your order from your account dashboard under "Orders". We will also notify you via email when your order is dispatched.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I cancel my order? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Orders can be cancelled within 12 hours of placing them. Please contact our support team immediately if you need to cancel.</div>
+      </div>
+    </div>
+
+    <div class="faq-group">
+      <h4 class="faq-group-title">PRODUCTS & AUTHENTICITY</h4>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Are the products authentic? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Yes. All items are crafted using traditional Bodo handloom weaving techniques by skilled artisans from the Bodo community in Assam.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How should I care for my traditional clothing? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">We recommend hand washing in cold water with mild detergent. Avoid direct sunlight when drying to preserve the vibrant natural colors.</div>
+      </div>
+    </div>
+
+    <div class="faq-group">
+      <h4 class="faq-group-title">RETURNS & REFUNDS</h4>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I return a product? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Yes, returns are accepted within 7 days of delivery. The item must be unworn and in its original condition. Contact us at heritage@culture.com to initiate a return.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long do refunds take? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Refunds are processed within 5–7 business days after we receive the returned item and inspect it.</div>
+      </div>
+    </div>
+
+    <div class="faq-group">
+      <h4 class="faq-group-title">PAYMENTS</h4>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What payment methods do you accept? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">We accept UPI, credit/debit cards, net banking, and Cash on Delivery for eligible orders.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is my payment information secure? <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Yes. All transactions are secured with 256-bit SSL encryption. We do not store your card or banking details on our servers.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="faq-contact">
+    <p>Still have questions?</p>
+    <a href="/contact_us" class="btn btn-outline">CONTACT US</a>
+  </div>
+
+</section>
+
+
+<script>
+function toggleFaq(btn){
+  btn.classList.toggle('open');
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+}
+</script>
+{% endblock %}

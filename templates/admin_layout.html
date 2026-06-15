@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Calibri", "Calibri Light", "Trebuchet MS", Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: #f7f6f3;
+      color: #1a1a1a;
+    }
+
+    /* SIDEBAR */
+    .adm-sidebar {
+      width: 230px;
+      min-height: 100vh;
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 50;
+    }
+
+    .adm-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .adm-logo h2 {
+      font-size: 16px;
+      letter-spacing: 6px;
+      color: white;
+      font-weight: 300;
+    }
+
+    .adm-logo p {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #444;
+      margin-top: 4px;
+    }
+
+    .adm-nav {
+      padding: 20px 0;
+      flex: 1;
+    }
+
+    .adm-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: #555;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 2px;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+
+    .adm-nav a:hover {
+      color: #ccc;
+      background: #111;
+    }
+
+    .adm-nav a.active {
+      color: white;
+      border-left-color: white;
+      background: #111;
+    }
+
+    .adm-nav a i {
+      width: 16px;
+      font-size: 13px;
+    }
+
+    .adm-nav .nav-section {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: #333;
+      padding: 16px 24px 6px;
+      margin-top: 8px;
+    }
+
+    .adm-logout {
+      padding: 20px 24px;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .adm-logout a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #555;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 2px;
+      transition: color 0.2s;
+    }
+
+    .adm-logout a:hover {
+      color: #cc5555;
+    }
+
+    /* MAIN */
+    .adm-main {
+      margin-left: 230px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .adm-topbar {
+      background: white;
+      border-bottom: 1px solid #eee;
+      padding: 16px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .adm-topbar-left h3 {
+      font-size: 14px;
+      letter-spacing: 2px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+
+    .adm-topbar-left p {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    .adm-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .adm-avatar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .adm-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #eee;
+    }
+
+    .adm-user-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .adm-user-role {
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 1px;
+    }
+
+    .adm-content {
+      padding: 36px;
+      flex: 1;
+    }
+
+    /* STAT CARDS */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .adm-stat {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 22px 20px;
+    }
+
+    .adm-stat-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .adm-stat-val {
+      font-size: 28px;
+      font-weight: 300;
+      color: #1a1a1a;
+    }
+
+    .adm-stat-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #ccc;
+    }
+
+    /* TABLES */
+    .adm-table-wrap {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .adm-table-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .adm-table-header h3 {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #666;
+      font-weight: 400;
+    }
+
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .adm-table th {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #aaa;
+      padding: 12px 20px;
+      text-align: left;
+      background: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      font-weight: 400;
+    }
+
+    .adm-table td {
+      padding: 14px 20px;
+      font-size: 13px;
+      color: #444;
+      border-bottom: 1px solid #f7f7f7;
+    }
+
+    .adm-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .adm-table tr:hover td {
+      background: #fafafa;
+    }
+
+    .adm-table img {
+      width: 44px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* BADGES */
+    .adm-badge {
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+
+    .badge-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .badge-warning {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
+    .badge-danger {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .badge-info {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    /* FORMS */
+    .adm-form-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 600px;
+    }
+
+    .adm-form-card h2 {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #666;
+      font-weight: 400;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .adm-field {
+      margin-bottom: 20px;
+    }
+
+    .adm-field label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .adm-field input,
+    .adm-field textarea,
+    .adm-field select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #e8e8e8;
+      background: white;
+      color: #1a1a1a;
+      font-size: 13px;
+      outline: none;
+      border-radius: 4px;
+      transition: border 0.2s;
+    }
+
+    .adm-field input:focus,
+    .adm-field textarea:focus,
+    .adm-field select:focus {
+      border-color: #999;
+    }
+
+    .adm-field textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+
+    .adm-btn {
+      padding: 11px 28px;
+      border: none;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: 3px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .adm-btn-primary {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .adm-btn-primary:hover {
+      background: #333;
+    }
+
+    .adm-btn-secondary {
+      background: #f0f0f0;
+      color: #666;
+      margin-left: 10px;
+    }
+
+    .adm-btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .adm-btn-sm {
+      padding: 6px 14px;
+      font-size: 10px;
+      margin-right: 4px;
+    }
+
+    .adm-btn-edit {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
+    .adm-btn-danger {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .adm-btn-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    /* CHARTS */
+    .adm-charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .adm-chart-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .adm-chart-card h4 {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #aaa;
+      margin-bottom: 18px;
+    }
+
+    body { background: #f7f3ea !important; }
+
+    /* HERITAGE ADMIN THEME REPAIR */
+    .adm-sidebar {
+      background: #201a0c;
+    }
+
+    .adm-logo {
+      border-bottom-color: #3b311f;
+    }
+
+    .adm-logo h2 {
+      color: #fffaf0;
+    }
+
+    .adm-logo p,
+    .adm-nav .nav-section {
+      color: #8b7a58;
+    }
+
+    .adm-nav a,
+    .adm-logout a {
+      color: #b9aa91;
+    }
+
+    .adm-nav a:hover,
+    .adm-nav a.active {
+      color: #facc15;
+      background: #2b2416;
+    }
+
+    .adm-nav a.active {
+      border-left-color: #facc15;
+    }
+
+    .adm-logout {
+      border-top-color: #3b311f;
+    }
+
+    .adm-main,
+    .adm-content {
+      background: #f7f3ea;
+    }
+
+    .adm-topbar,
+    .adm-stat,
+    .adm-table-wrap,
+    .adm-form-card,
+    .adm-chart-card {
+      background: #fffaf0;
+      border-color: #ded4c1;
+      box-shadow: 0 12px 30px rgba(45, 40, 31, 0.04);
+    }
+
+    .adm-topbar-left h3,
+    .adm-stat-val,
+    .adm-user-name {
+      color: #2d281f;
+    }
+
+    .adm-topbar-left p,
+    .adm-user-role,
+    .adm-stat-label,
+    .adm-table th,
+    .adm-chart-card h4,
+    .adm-field label {
+      color: #746a5d;
+    }
+
+    .adm-stat-icon {
+      color: #b88918;
+    }
+
+    .adm-table-header,
+    .adm-form-card h2 {
+      border-bottom-color: #eadfc9;
+    }
+
+    .adm-table-header h3,
+    .adm-form-card h2 {
+      color: #62594d;
+    }
+
+    .adm-table th {
+      background: #f1e8d8;
+      border-bottom-color: #ded4c1;
+    }
+
+    .adm-table td {
+      color: #3b3428;
+      border-bottom-color: #eadfc9;
+    }
+
+    .adm-table tr:hover td {
+      background: #f6eddd;
+    }
+
+    .adm-field input,
+    .adm-field textarea,
+    .adm-field select {
+      background: #fffdf8;
+      border-color: #ded4c1;
+      color: #2d281f;
+    }
+
+    .adm-field input:focus,
+    .adm-field textarea:focus,
+    .adm-field select:focus {
+      border-color: #b88918;
+    }
+
+    .adm-btn-primary {
+      background: #facc15;
+      color: #201a0c;
+    }
+
+    .adm-btn-primary:hover {
+      background: #e7b90e;
+    }
+
+    .adm-btn-secondary {
+      background: #efe6d8;
+      color: #62594d;
+    }
+
+    .adm-btn-secondary:hover {
+      background: #e2d5c0;
+    }
+
+    /* WATERMARKS */
+    .watermark-1 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(0,0,0,0.03)' transform='rotate(-30)'><text x='10' y='50' font-family='sans-serif' font-size='16' font-weight='bold'>HERITAGE</text></svg>") !important;
+      background-repeat: repeat !important;
+      background-size: 150px 150px !important;
+    }
+
+    .watermark-2 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(0,0,0,0.03)' transform='rotate(-30)'><text x='10' y='50' font-family='serif' font-size='16' font-weight='normal'>TRADITIONAL</text></svg>") !important;
+      background-repeat: repeat !important;
+      background-size: 150px 150px !important;
+    }
+
+    .watermark-3 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(0,0,0,0.03)' transform='rotate(-30)'><text x='5' y='50' font-family='sans-serif' font-size='14' font-style='italic'>PREMIUM WEAR</text></svg>") !important;
+      background-repeat: repeat !important;
+      background-size: 150px 150px !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="adm-sidebar">
+    <div class="adm-logo">
+      <h2>HERITAGE</h2>
+      <p>ADMIN PANEL</p>
+    </div>
+    <nav class="adm-nav">
+      <span class="nav-section">OVERVIEW</span>
+      <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' }}">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+      <span class="nav-section">CATALOGUE</span>
+      <a href="{{ url_for('admin.stock') }}" class="{{ 'active' if request.endpoint == 'admin.stock' }}">
+        <i class="fas fa-boxes"></i> Stock
+      </a>
+      <a href="{{ url_for('admin.add_product') }}" class="{{ 'active' if request.endpoint == 'admin.add_product' }}">
+        <i class="fas fa-plus-circle"></i> Add Product
+      </a>
+      <span class="nav-section">MANAGEMENT</span>
+      <a href="{{ url_for('admin.orders') }}" class="{{ 'active' if request.endpoint == 'admin.orders' }}">
+        <i class="fas fa-shopping-bag"></i> Orders
+      </a>
+      <a href="{{ url_for('admin.users') }}" class="{{ 'active' if request.endpoint == 'admin.users' }}">
+        <i class="fas fa-users"></i> Users
+      </a>
+      <span class="nav-section">STOREFRONT</span>
+      <a href="/" target="_blank">
+        <i class="fas fa-store"></i> View Store
+      </a>
+    </nav>
+    <div class="adm-logout">
+      <a href="{{ url_for('auth.admin_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+
+  <div class="adm-main">
+    <div class="adm-topbar">
+      <div class="adm-topbar-left">
+        <h3>{% block page_title %}Dashboard{% endblock %}</h3>
+        <p>Heritage Admin Panel</p>
+      </div>
+      <div class="adm-topbar-right">
+        <div class="adm-avatar-wrap">
+          <img src="{{ img_src(admin.profile_photo if admin else None) }}" class="adm-avatar">
+          <div>
+            <div class="adm-user-name">{{ admin.username if admin else 'Admin' }}</div>
+            <div class="adm-user-role">ADMINISTRATOR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="adm-content">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div
+        style="background:#fff8e1;border:1px solid #ffe082;padding:12px 18px;border-radius:6px;margin-bottom:20px;font-size:13px;color:#795548;">
+        {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const watermarks = ['watermark-1', 'watermark-2', 'watermark-3'];
+      const path = window.location.pathname;
+      let hash = 0;
+      for (let i = 0; i < path.length; i++) {
+          hash = path.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const index = Math.abs(hash) % watermarks.length;
+      document.body.classList.add(watermarks[index]);
+    })();
+  </script>
+</body>
+
+</html>

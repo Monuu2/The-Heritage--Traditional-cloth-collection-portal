@@ -1,0 +1,57 @@
+{% extends "admin_layout.html" %}
+{% block page_title %}Stock Management{% endblock %}
+{% block content %}
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+  <div>
+    <h2 style="font-size:13px;letter-spacing:3px;color:#666;font-weight:400;">{{ items|length }} PRODUCT{{ 'S' if items|length != 1 }}</h2>
+  </div>
+  <a href="{{ url_for('admin.add_product') }}" class="adm-btn adm-btn-primary">+ ADD PRODUCT</a>
+</div>
+
+<div class="adm-table-wrap">
+  <table class="adm-table">
+    <thead>
+      <tr>
+        <th>PRODUCT</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+        <th>STOCK</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td><img src="{{ img_src(item.image_url) }}"></td>
+        <td>
+          <strong style="font-size:13px;">{{ item.name }}</strong><br>
+          <span style="font-size:11px;color:#aaa;">ID #{{ '%04d'|format(item.id) }}</span>
+        </td>
+        <td>₹ {{ item.price }}</td>
+        <td>{{ item.stock }}</td>
+        <td>
+          {% if item.stock == 0 %}
+            <span class="adm-badge badge-danger">Out of Stock</span>
+          {% elif item.stock <= 5 %}
+            <span class="adm-badge badge-warning">Low Stock</span>
+          {% else %}
+            <span class="adm-badge badge-success">Available</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('admin.increase_stock', id=item.id) }}" class="adm-btn adm-btn-sm adm-btn-success" title="Increase Stock">+1</a>
+          <a href="{{ url_for('admin.decrease_stock', id=item.id) }}" class="adm-btn adm-btn-sm adm-btn-edit" title="Decrease Stock">-1</a>
+          <a href="{{ url_for('admin.edit_product', id=item.id) }}" class="adm-btn adm-btn-sm" style="background:#f0f4ff;color:#3355aa;">Edit</a>
+          <a href="{{ url_for('admin.delete_stock', id=item.id) }}" class="adm-btn adm-btn-sm adm-btn-danger" onclick="return confirm('Delete this product?')">Delete</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" style="text-align:center;color:#aaa;padding:40px;">No products found. <a href="{{ url_for('admin.add_product') }}" style="color:#1a1a1a;">Add one →</a></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

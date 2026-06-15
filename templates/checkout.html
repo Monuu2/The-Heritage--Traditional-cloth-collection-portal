@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="checkout-container">
+  <div class="checkout-header">
+    <h1>ORDER REVIEW</h1>
+    <p>Review your selection before proceeding</p>
+  </div>
+
+  {% if items %}
+  <div class="checkout-layout">
+    <div class="orders-list">
+      {% for item in items %}
+      <div class="order-card">
+        <div class="order-card-img">
+          <img src="{{ img_src(item.image_url) }}" alt="{{ item.name }}">
+        </div>
+        <div class="order-card-info">
+          <p class="order-id">Heritage Collection</p>
+          <h3>{{ item.name }}</h3>
+          <p class="order-price">₹ {{ item.price }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="checkout-summary">
+      <div class="summary-title">ORDER SUMMARY</div>
+      <div class="summary-line"><span>Subtotal</span><span>₹ {{ total }}</span></div>
+      <div class="summary-line"><span>Shipping</span><span>₹ 100</span></div>
+      <div class="summary-total summary-line"><span>TOTAL</span><span>₹ {{ total + 100 }}</span></div>
+      
+      <a href="/place-order" class="btn btn-dark" style="width: 100%; margin-top: 32px;">PROCEED TO ADDRESS</a>
+      <a href="/cart" class="dash-link" style="display: block; text-align: center; margin-top: 20px;">BACK TO CART</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="fas fa-shopping-cart"></i></div>
+    <h2>Your cart is empty</h2>
+    <p>Add items before checking out.</p>
+    <a href="/category/0" class="btn btn-dark">EXPLORE COLLECTION</a>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="checkout-container" style="max-width: 1400px;">
+  {% if search_query %}
+  <div class="info-header" style="text-align: center; margin-bottom: 80px;">
+    <h1>SEARCH RESULTS</h1>
+    <p>{{ items|length }} exquisite heritage piece{{ 's' if items|length != 1 }} found for "{{ search_query }}"</p>
+  </div>
+  {% endif %}
+
+  {% if items %}
+  <div class="products-grid">
+    {% for item in items %}
+    <a href="/item/{{ item.id }}" class="product-card">
+      <div class="card-img-wrap">
+        <img src="{{ img_src(item.image_url) }}" alt="{{ item.name }}" class="card-img" loading="lazy">
+        
+        {% if item.stock == 0 %}
+        <span class="card-badge" style="background: #555;">OUT OF STOCK</span>
+        {% elif item.stock <= 5 %}
+        <span class="card-badge" style="background: #e67e22;">ONLY {{ item.stock }} LEFT</span>
+        {% else %}
+        <span class="card-badge">NEW ARRIVAL</span>
+        {% endif %}
+
+        <div class="card-actions">
+          <span class="card-action-btn" title="Add to Cart" onclick="event.stopPropagation(); event.preventDefault(); window.location='/add-to-cart/{{ item.id }}'">
+            <i class="fas fa-shopping-cart"></i>
+          </span>
+          <span class="card-action-btn" title="Wishlist" onclick="event.stopPropagation(); event.preventDefault(); window.location='{% if current_user.is_authenticated %}/wishlist/add/{{ item.id }}{% else %}/login{% endif %}'">
+            <i class="far fa-heart"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <span class="card-cat-label">{{ item.category.name if item.category else 'TRADITIONAL WEAR' }}</span>
+        <h3 class="card-title">{{ item.name }}</h3>
+        <p class="card-price">₹{{ "%.0f"|format(item.price) }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon"><i class="fas fa-search"></i></div>
+    <h2>No products found</h2>
+    {% if search_query %}
+    <p>We couldn't find any matches for "{{ search_query }}". Try a different search term or browse our full collection.</p>
+    {% endif %}
+    <a href="/category/0" class="btn btn-dark">BROWSE ALL PRODUCTS</a>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

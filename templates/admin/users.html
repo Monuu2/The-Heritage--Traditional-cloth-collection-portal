@@ -1,0 +1,52 @@
+{% extends "admin_layout.html" %}
+{% block page_title %}Users{% endblock %}
+{% block content %}
+
+<div class="adm-table-wrap">
+  <div class="adm-table-header">
+    <h3>REGISTERED USERS — {{ users|length }} TOTAL</h3>
+  </div>
+  <table class="adm-table">
+    <thead>
+      <tr>
+        <th>AVATAR</th>
+        <th>USERNAME</th>
+        <th>EMAIL</th>
+        <th>PHONE</th>
+        <th>ROLE</th>
+        <th>STATUS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>
+          <img src="{{ img_src(user.profile_photo) }}"
+               style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+        </td>
+        <td><strong>{{ user.username }}</strong></td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone or '—' }}</td>
+        <td>
+          {% if user.is_admin %}
+            <span class="adm-badge badge-danger">Admin</span>
+          {% else %}
+            <span class="adm-badge badge-info">Customer</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if user.is_active %}
+            <span class="adm-badge badge-success">Active</span>
+          {% else %}
+            <span class="adm-badge badge-warning">Inactive</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" style="text-align:center;color:#aaa;padding:40px;">No users found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

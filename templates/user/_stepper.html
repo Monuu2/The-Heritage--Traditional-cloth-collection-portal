@@ -1,0 +1,209 @@
+{#
+  Checkout progress stepper
+  Example usage:
+  {% set checkout_step = 1 %}
+  {% include 'user/_stepper.html' %}
+#}
+
+<div class="ck-stepper">
+  <div class="ck-stepper-inner">
+
+    {# Step 1 – Cart (always done by this point) #}
+    <div class="ck-step ck-done">
+      <div class="ck-step-bubble">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 18c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59L5.25 14c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.45 4H5.21L4.27 2H1zm6 16c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2z"/></svg>
+      </div>
+      <span class="ck-step-label">Cart</span>
+    </div>
+
+    <div class="ck-connector {% if checkout_step >= 1 %}ck-conn-filled{% endif %}"></div>
+
+    {# Step 2 – Address #}
+    <div class="ck-step {% if checkout_step == 1 %}ck-active{% elif checkout_step > 1 %}ck-done{% endif %}">
+      <div class="ck-step-bubble">
+        {% if checkout_step > 1 %}
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        {% else %}
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        {% endif %}
+      </div>
+      <span class="ck-step-label">Address</span>
+    </div>
+
+    <div class="ck-connector {% if checkout_step >= 2 %}ck-conn-filled{% endif %}"></div>
+
+    {# Step 3 – Payment #}
+    <div class="ck-step {% if checkout_step == 2 %}ck-active{% elif checkout_step > 2 %}ck-done{% endif %}">
+      <div class="ck-step-bubble">
+        {% if checkout_step > 2 %}
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        {% else %}
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+        {% endif %}
+      </div>
+      <span class="ck-step-label">Payment</span>
+    </div>
+
+    <div class="ck-connector {% if checkout_step >= 3 %}ck-conn-filled{% endif %}"></div>
+
+    {# Step 4 – Confirmed #}
+    <div class="ck-step {% if checkout_step == 3 %}ck-active ck-confirmed{% endif %}">
+      <div class="ck-step-bubble">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      </div>
+      <span class="ck-step-label">Confirmed</span>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ── Checkout Stepper ── */
+.ck-stepper {
+  background: transparent;
+  border-bottom: 1px solid #1e1e1e;
+  padding: 22px 0 18px;
+  margin-bottom: 0;
+}
+body.light-mode .ck-stepper {
+  border-bottom-color: #e8e3dd;
+}
+.ck-stepper-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Step node */
+.ck-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.ck-step-bubble {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  background: transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.ck-step-bubble svg {
+  width: 16px;
+  height: 16px;
+}
+.ck-step-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #444;
+  font-weight: 500;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+
+/* Done step */
+.ck-done .ck-step-bubble {
+  border-color: #666;
+  color: #888;
+  background: transparent;
+}
+.ck-done .ck-step-label { color: #666; }
+
+/* Active step */
+.ck-active .ck-step-bubble {
+  border-color: #ff66b2;
+  color: #ff66b2;
+  background: transparent;
+  box-shadow: 0 0 0 3px rgba(255,102,178,0.08);
+  animation: ckPulse 2s ease-in-out infinite;
+}
+.ck-active .ck-step-label { color: #ff66b2; font-weight: 600; }
+
+/* Confirmed (green accent) */
+.ck-confirmed .ck-step-bubble {
+  border-color: #ff66b2;
+  color: #ff66b2;
+  box-shadow: 0 0 0 4px rgba(255,102,178,0.15);
+  animation: ckPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.ck-confirmed .ck-step-label { color: #ff66b2; }
+
+@keyframes ckPulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(255,102,178,0.08); }
+  50%      { box-shadow: 0 0 0 6px rgba(255,102,178,0.04); }
+}
+@keyframes ckPop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Connector line */
+.ck-connector {
+  flex: 1;
+  height: 1px;
+  background: #1a1a1a;
+  margin: 0 4px;
+  margin-bottom: 22px; /* align with bubble centre */
+  position: relative;
+  overflow: hidden;
+}
+.ck-connector::after {
+  content: '';
+  position: absolute;
+  left: -100%;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: #ff66b2;
+  transition: left 0.6s ease;
+}
+.ck-connector.ck-conn-filled::after {
+  left: 0;
+}
+
+/* Light mode overrides */
+body.light-mode .ck-step-bubble   { border-color: #e5e7eb; color: #a1a1aa; background: #fff; }
+body.light-mode .ck-step-label    { color: #71717a; }
+body.light-mode .ck-done .ck-step-bubble { border-color: #000; color: #000; }
+body.light-mode .ck-done .ck-step-label  { color: #000; }
+body.light-mode .ck-active .ck-step-bubble {
+  border-color: #000;
+  color: #fff;
+  background: #000;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+}
+body.light-mode .ck-active .ck-step-label { color: #000; font-weight: 700; }
+body.light-mode .ck-active .ck-step-bubble { animation: ckPulseLt 2s ease-in-out infinite; }
+@keyframes ckPulseLt {
+  0%,100% { box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
+  50%      { box-shadow: 0 0 0 8px rgba(0,0,0,0.04); }
+}
+body.light-mode .ck-confirmed .ck-step-bubble { 
+    border-color: #000; 
+    color: #000; 
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.1); 
+}
+body.light-mode .ck-confirmed .ck-step-label  { color: #000; }
+body.light-mode .ck-connector  { background: #e5e7eb; }
+body.light-mode .ck-connector::after { background: #000; }
+
+@media (max-width: 420px) {
+  .ck-step-label { font-size: 8px; letter-spacing: 0.5px; }
+  .ck-step-bubble { width: 32px; height: 32px; }
+  .ck-step-bubble svg { width: 13px; height: 13px; }
+}
+</style>
